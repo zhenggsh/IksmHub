@@ -131,18 +131,32 @@ section.cover {
   background: linear-gradient(120deg, #070b18, #101a3d, #1a0f38, #070b18);
   background-size: 300% 300%; animation: bgmove 10s ease infinite;
 }
-.cover .orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .5; }
-.cover .orb1 { width: 340px; height: 340px; background: #00b8d4; top: -80px; right: 60px; animation: glow 5s ease infinite; }
-.cover .orb2 { width: 280px; height: 280px; background: #7c4dff; bottom: -60px; left: 80px; animation: glow 6s ease infinite; }
-.cover .brand { position: absolute; top: 46px; left: 64px; font-size: 15px; letter-spacing: 4px; color: #7fe9ff; font-weight: 600; }
-.cover h1 {
-  position: absolute; top: 250px; left: 0; right: 0; text-align: center;
-  font-size: 74px; font-weight: 900; letter-spacing: 10px; color: #fff; margin: 0;
-  text-shadow: 0 0 40px rgba(0,229,255,.45);
+.cover .grid-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(127,233,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(127,233,255,.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: radial-gradient(circle at 50% 42%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(circle at 50% 42%, #000 25%, transparent 78%);
 }
-.cover .sub { position: absolute; top: 370px; left: 0; right: 0; text-align: center; font-size: 21px; color: #9fb0d8; letter-spacing: 3px; }
-.cover .meta { position: absolute; bottom: 60px; left: 0; right: 0; text-align: center; font-size: 14px; color: #5f6b8f; letter-spacing: 2px; }
-.cover .line { position: absolute; top: 350px; left: 50%; transform: translateX(-50%); width: 120px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, #00e5ff, #7c4dff); }
+.cover .orb { position: absolute; border-radius: 50%; filter: blur(75px); opacity: .55; }
+.cover .orb1 { width: 400px; height: 400px; background: #00b8d4; top: -110px; right: 30px; animation: glow 5s ease infinite; }
+.cover .orb2 { width: 330px; height: 330px; background: #7c4dff; bottom: -90px; left: 50px; animation: glow 6s ease infinite; }
+.cover .orb3 { width: 210px; height: 210px; background: #ff4d8d; top: 42%; left: -70px; opacity: .3; animation: glow 7s ease infinite; }
+.cover .num { position: absolute; right: 24px; bottom: -78px; font-size: 340px; font-weight: 900; line-height: 1; color: rgba(255,255,255,.045); }
+.cover .brand { position: absolute; top: 44px; left: 64px; font-size: 16px; letter-spacing: 5px; color: #7fe9ff; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.cover .brand .dot { width: 10px; height: 10px; border-radius: 2px; background: linear-gradient(135deg, #00e5ff, #7c4dff); box-shadow: 0 0 12px rgba(0,229,255,.8); }
+.cover .ver { position: absolute; top: 38px; right: 64px; font-size: 13px; letter-spacing: 2px; color: #7fe9ff; border: 1px solid rgba(0,229,255,.4); border-radius: 999px; padding: 5px 16px; background: rgba(0,229,255,.08); }
+.cover h1 {
+  position: absolute; top: 210px; left: 0; right: 0; text-align: center;
+  font-size: 106px; font-weight: 900; letter-spacing: 18px; margin: 0; color: transparent;
+  background: linear-gradient(92deg, #ffffff 18%, #7fe9ff 55%, #c792ff 92%);
+  -webkit-background-clip: text; background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(0,229,255,.35));
+}
+.cover .en { position: absolute; top: 348px; left: 0; right: 0; text-align: center; font-size: 15px; letter-spacing: 13px; color: #6b7ba6; font-weight: 600; }
+.cover .line { position: absolute; top: 396px; left: 50%; transform: translateX(-50%); width: 170px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, transparent, #00e5ff, #7c4dff, transparent); box-shadow: 0 0 16px rgba(0,229,255,.65); }
+.cover .sub { position: absolute; top: 424px; left: 0; right: 0; text-align: center; font-size: 22px; color: #aebadd; letter-spacing: 6px; }
+.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px; display: flex; justify-content: space-between; font-size: 13px; color: #64719b; letter-spacing: 2px; border-top: 1px solid rgba(255,255,255,.1); padding-top: 16px; }
 
 /* ============ 四象限 ============ */
 .quad { display: grid; grid-template-columns: 26px 1fr 1fr; grid-template-rows: 24px 1fr 1fr; gap: 8px; height: 100%; }
@@ -160,14 +174,19 @@ section.cover {
 <!-- _class: cover -->
 <!-- _paginate: false -->
 
+<div class="grid-bg"></div>
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
-<div class="brand">IKSM · 知识转化</div>
+<div class="orb orb3"></div>
+<div class="num">01</div>
+<div class="brand"><span class="dot"></span>IKSM · 知识转化</div>
+<div class="ver">v1.0.0</div>
 
 <h1>工作方法论</h1>
+<div class="en">WORK&nbsp;&nbsp;METHODOLOGY</div>
 <div class="line"></div>
 <div class="sub">把经验变成方法 · 把方法变成习惯</div>
-<div class="meta">为知笔记分享 · 2026/10 更新 · IksmHub marp v1.0.0</div>
+<div class="meta"><span>iksm / 01-工作方法</span><span>为知笔记分享 · 2026/10 更新</span><span>Marp → HTML Slide</span></div>
 
 ---
 
@@ -419,20 +438,20 @@ section.cover {
 <div class="gist">客户说的是<em class="o">业务需求</em>，我们要把它翻译成系统能实现的<em class="g">功能需求</em>——<em>背景、场景、功能</em>三步走。</div>
 
 <div class="content">
-<div class="cols">
-  <div class="col-l vlist">
-    <div class="grid">
-      <div class="card o"><h4>业务需求</h4><p>客户提出的，是"想要什么结果"</p></div>
-      <div class="card g"><h4>功能需求</h4><p>我们转换的，是"系统怎么实现"</p></div>
-    </div>
-    <details class="qa"><summary>反例："在这里加个按钮，点击计算 XXX 汇总"</summary><div class="ans">客户直接给出了<b>功能方案</b>——先问业务动机，再判断这个按钮是不是最优解。</div></details>
-    <details class="qa"><summary>反例："要一个项目管理功能 / 需要 BI、BigData"</summary><div class="ans">一句话需求——<b>背景场景全缺失</b>，无法评估、无法排期。</div></details>
+<div class="cols" style="height:auto;">
+  <div class="col-l vlist" style="height:auto;">
+    <div class="card o"><h4>业务需求</h4><p>客户提出的，是"想要什么结果"</p></div>
+    <div class="card g"><h4>功能需求</h4><p>我们转换的，是"系统怎么实现"</p></div>
   </div>
-  <div class="col-r vlist">
+  <div class="col-r vlist" style="height:auto;">
     <div class="card"><h4>【需求背景】</h4><p>客户为什么提？动机和出发点？想解决什么业务问题？</p></div>
     <div class="card"><h4>【需求场景】</h4><p>谁，在什么时候，通过什么操作，达到什么目的？</p></div>
     <div class="card"><h4>【功能要求】</h4><p>前两步说清后，再谈功能、性能、操作方式的要求。</p></div>
   </div>
+</div>
+<div class="grid" style="height:auto;margin-top:16px;">
+  <details class="qa"><summary>反例："在这里加个按钮，点击计算 XXX 汇总"</summary><div class="ans">客户直接给出了<b>功能方案</b>——先问业务动机，再判断这个按钮是不是最优解。</div></details>
+  <details class="qa"><summary>反例："要一个项目管理功能 / 需要 BI、BigData"</summary><div class="ans">一句话需求——<b>背景场景全缺失</b>，无法评估、无法排期。</div></details>
 </div>
 </div>
 
