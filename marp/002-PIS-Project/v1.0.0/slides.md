@@ -161,6 +161,26 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
 .stack .card { padding: 10px 14px; }
 .stack .card h4 { margin: 0 0 2px; font-size: 16px; }
 .stack .card p { margin: 0; font-size: 13px; line-height: 1.4; }
+
+/* 配图 / 关系图重点页：图占内容区绝大部分 */
+section.shot .gist { top: 74px; font-size: 15px; }
+section.shot .content {
+  margin: 108px 36px 22px;
+  height: 582px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+section.shot .content img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+section.shot .content img.ui {
+  border-radius: 10px;
+  border: 1px solid rgba(127,233,255,.28);
+  box-shadow: 0 18px 48px rgba(0,0,0,.45);
+}
 </style>
 
 <!-- _class: cover -->
@@ -199,36 +219,37 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
     <p>目的是实践最有用的项目管理经验。</p>
   </div>
   <div class="card g">
-    <h4>先经验，后功能</h4>
-    <p>上游把计划管理经验放在产品功能之前。</p>
-    <p>本讲按这个顺序：方法 → 已实现能力 → 还没接上的缺口。</p>
+    <h4>这次多了两块</h4>
+    <p>功能里写了团队管理和成员看板。</p>
+    <p>架构改成四层，并配了流程图和数据关系图。</p>
+    <p>下一步收成三条。</p>
   </div>
 </div>
 </div>
 
-<div class="note"><b>边界：</b>只讲 mydoc/PIS_intro.md 写到的内容。上游不再声称的能力，本讲不再出现。</div>
+<div class="note"><b>边界：</b>只讲 mydoc/PIS_intro.md 写到的内容。团队看板在下一步里仍要增加，本讲标成未实现。</div>
 
 ---
 
 <div class="title"><span class="no">00</span>内容地图</div>
-<div class="gist">五段讲完：<em>为什么要做</em>，<em class="g">计划怎么管</em>，<em>产品现在能做什么</em>，<em class="p">代码怎么串起来</em>，以及<em class="o">已经露出但还没接上的缺口</em>。</div>
+<div class="gist">顺序跟上游：<em>为什么做</em>，<em class="g">计划怎么管</em>，<em>现在的功能与配图</em>，<em class="p">四层架构和数据关系</em>，以及<em class="o">还没做的三件事</em>。</div>
 
 <div class="content">
 <div class="vlist">
   <div class="grid" style="height:auto;">
-    <div class="card"><h4>01 设计背景</h4><p>计划制定与追踪。Project 与 Excel 都不合适，改用 Web。</p></div>
-    <div class="card g"><h4>02 计划管理经验</h4><p>WBS、起点终点与依赖、追踪、赶工六条。放在功能之前。</p></div>
-    <div class="card"><h4>03 主要功能</h4><p>五条能力、项目列表、工作区、FS 依赖、自研甘特。</p></div>
+    <div class="card"><h4>01 设计背景</h4><p>Project 与 Excel 都不合适，改用 Web。</p></div>
+    <div class="card g"><h4>02 计划管理经验</h4><p>WBS、起点终点与依赖、追踪、赶工六条。</p></div>
+    <div class="card"><h4>03 主要功能</h4><p>项目列表、任务表、甘特图各占一页大图。</p></div>
   </div>
   <div class="grid" style="height:auto;">
-    <div class="card p"><h4>04 架构实现</h4><p>Action → 事务 → 纯函数。SQLite 落库，校验零 IO。</p></div>
-    <div class="card o"><h4>05 下一步</h4><p>身份、审计、乐观锁、zod、测试，以及设计里尚未编码的能力。</p></div>
-    <div class="card r"><h4>未实现保持未实现</h4><p>顶栏三个入口、登录、基线、V5/V6、SS/FF/SF、PNG/Excel，都还没接上。</p></div>
+    <div class="card p"><h4>04 架构与数据</h4><p>四层流程图、目录、技术栈、ER 关系图。</p></div>
+    <div class="card o"><h4>05 下一步</h4><p>团队管理、项目文档、项目审计。都还没做。</p></div>
+    <div class="card r"><h4>未实现</h4><p>登录、成员看板、zod 入口、基线与扫描报告、任务分配表。</p></div>
   </div>
 </div>
 </div>
 
-<div class="note"><b>溯源：</b>iksm/02-PIS-Project/PIS_intro.md ← zhenggsh/PIS mydoc/PIS_intro.md。截图留在上游仓库，本讲不转载。</div>
+<div class="note"><b>溯源：</b>iksm/02-PIS-Project/PIS_intro.md ← zhenggsh/PIS mydoc/PIS_intro.md。配图来自上游 mydoc/files/。</div>
 
 ---
 
@@ -238,31 +259,21 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
 <div class="content">
 <div class="cols">
   <div class="col-l vlist">
-    <div class="card r">
-      <h4>Project</h4>
-      <p>太繁重，不适合小团队把一份计划跑起来。</p>
-    </div>
-    <div class="card o">
-      <h4>Excel</h4>
-      <p>无法处理依赖。前后任务一变，表就跟不上。</p>
-    </div>
-    <div class="card">
-      <h4>两者共同的缺口</h4>
-      <p>都不能通过 Web 做团队协作。</p>
-    </div>
+    <div class="card r"><h4>Project</h4><p>太繁重，不适合小团队把一份计划跑起来。</p></div>
+    <div class="card o"><h4>Excel</h4><p>无法处理依赖。前后任务一变，表就跟不上。</p></div>
+    <div class="card"><h4>两者共同的缺口</h4><p>都不能通过 Web 做团队协作。</p></div>
   </div>
   <div class="col-r">
     <div class="card g" style="height:100%;">
       <h4>因此</h4>
       <p>为了制定某个项目的计划，直接使用 Trae 开发 Web 版。</p>
       <p>它是项目计划的制定与追踪工具，用来实践最有用的项目管理经验。</p>
-      <p>后面的功能都从这句需求长出来，不另加上游没写的场景。</p>
     </div>
   </div>
 </div>
 </div>
 
-<div class="note"><b>位置：</b>设计背景只说明动机。拆任务、盯终点、赶工，放到下一节的计划管理经验。</div>
+<div class="note"><b>位置：</b>设计背景只说明动机。拆任务、盯终点、赶工，放到下一节。</div>
 
 ---
 
@@ -287,7 +298,7 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
 
 <div class="content">
 <div class="cols">
-  <div class="col-l vlist">
+  <div class="col-l">
     <div class="card">
       <h4>四条拆法</h4>
       <ul class="tight">
@@ -317,26 +328,10 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
 
 <div class="content">
 <div class="grid">
-  <div class="card g">
-    <h4>起点</h4>
-    <p>一般用「开工会」。</p>
-    <p>它也是整张依赖网的总起点。</p>
-  </div>
-  <div class="card o">
-    <h4>终点</h4>
-    <p>任务的完成时间。</p>
-    <p>安排好 WBS 和依赖后，务必紧盯它。</p>
-  </div>
-  <div class="card">
-    <h4>逻辑依赖</h4>
-    <p>事先事后。</p>
-    <p>例如先设计，再研发。</p>
-  </div>
-  <div class="card p">
-    <h4>资源依赖</h4>
-    <p>同一份资源排不开。</p>
-    <p>例如同一个负责人。</p>
-  </div>
+  <div class="card g"><h4>起点</h4><p>一般用「开工会」。</p><p>它也是整张依赖网的总起点。</p></div>
+  <div class="card o"><h4>终点</h4><p>任务的完成时间。</p><p>安排好 WBS 和依赖后，务必紧盯它。</p></div>
+  <div class="card"><h4>逻辑依赖</h4><p>先做什么，后做什么。</p><p>例如先设计，再研发。</p></div>
+  <div class="card p"><h4>资源依赖</h4><p>同一份资源排不开。</p><p>例如同一个负责人。</p></div>
 </div>
 </div>
 
@@ -350,18 +345,9 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
 <div class="content">
 <div class="cols">
   <div class="col-l vlist">
-    <div class="card">
-      <h4>变化带来的更新</h4>
-      <p>人员、需求、条件、资源变了，要及时刷新，并看对目标的影响。</p>
-    </div>
-    <div class="card g">
-      <h4>渐进明细带来的更新</h4>
-      <p>两周后原先看不清、时间范围大。随着时间推移，拆到更细、更准的时间点。</p>
-    </div>
-    <div class="card o">
-      <h4>通报节奏</h4>
-      <p>一周至少调整两次。目标、进展和执行风险至少周报；关键期日报。</p>
-    </div>
+    <div class="card"><h4>变化带来的更新</h4><p>人员、需求、条件、资源变了，要及时刷新，并看对目标的影响。</p></div>
+    <div class="card g"><h4>渐进明细带来的更新</h4><p>两周后原先看不清、时间范围大。随着时间推移，拆到更细、更准的时间点。</p></div>
+    <div class="card o"><h4>通报节奏</h4><p>一周至少调整两次。目标、进展和执行风险至少周报；关键期日报。</p></div>
   </div>
   <div class="col-r">
     <div class="card" style="height:100%;">
@@ -370,7 +356,7 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
         <li>更新，就是为了保住终点</li>
         <li>最终目标不能改；要改必须向上沟通并获批准</li>
         <li>不能最后一天才发现完不成，必须提前识别</li>
-        <li>不能存在过去时间点的任务。「上个月该完成、现在还没做完」不成立</li>
+        <li>不能存在过去时间点的任务</li>
         <li>只能调<b>时长和依赖</b>，不能手改开始和终止时间</li>
         <li>一旦影响总进度或关键里程碑，就要采取措施</li>
       </ul>
@@ -397,76 +383,30 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
 </div>
 </div>
 
-<div class="note"><b>输出物：赶工强化后的计划。</b>这是经验，不是产品里已经做成的一个「赶工按钮」。</div>
+<div class="note"><b>输出物：赶工强化后的计划。</b>这是经验，不是产品里的一个按钮。</div>
 
 ---
 
-<div class="title"><span class="no">03</span>主要功能 · 五条能力</div>
-<div class="gist">设计文档把原始需求拆成五条<em>可实现</em>的能力。起止由排期引擎推算，<em class="o">不是手填</em>；改工期或依赖后要重算，并指出是否影响初验。</div>
+<!-- _class: shot -->
+
+<div class="title"><span class="no">03</span>项目列表</div>
+<div class="gist">列表可新建、删除项目。新建时填写<em>名称、可选代号、描述、开工会、初验点</em>。</div>
 
 <div class="content">
-<div class="cols">
-  <div class="col-l vlist">
-    <div class="card"><h4>① 多层级工作分解</h4><p>增删改、缩进与排序、WBS 编码、父节点日期汇总。</p></div>
-    <div class="card g"><h4>② 开工会即起点</h4><p>项目开工会作为无前置任务的默认起点。</p></div>
-    <div class="card"><h4>③ 排期引擎推算起止</h4><p>用工作日工期、资源与前置依赖安排工作。起止不是手填。</p></div>
-  </div>
-  <div class="col-r vlist">
-    <div class="card p"><h4>④ 初验点与甘特图</h4><p>设立项目初验点，并把计划画成甘特图。</p></div>
-    <div class="card o"><h4>⑤ 变更后重算</h4><p>调整工期或依赖后自动重算，并指出是否影响初验。</p></div>
-    <div class="card"><h4>和上一节的对应</h4><p>开工会、依赖、紧盯终点、只调时长和依赖，在产品里落成这五条。</p></div>
-  </div>
+  <img class="ui" src="assets/project-info.png" alt="项目列表：查看已有项目，并可新建、删除" />
 </div>
-</div>
-
-<div class="note"><b>五条都来自设计文档。</b>经验里的赶工六条不是这里的一条产品能力。</div>
 
 ---
 
-<div class="title"><span class="no">03</span>主要功能 · 列表与工作区</div>
-<div class="gist">列表负责<em>看项目、建项目、删项目</em>。工作区负责分解、调整、追踪，并把同一份计划画成甘特图。</div>
-
-<div class="content">
-<div class="cols">
-  <div class="col-l vlist">
-    <div class="card">
-      <h4>项目列表</h4>
-      <p>查看已有项目，并可新建、删除。</p>
-      <p>新建时填写：名称、可选代号、描述、开工会、初验点。</p>
-    </div>
-    <div class="card o">
-      <h4>创建时会拦住的日期</h4>
-      <p>Action 入参检查包含：空名称、日期格式、初验不早于开工会、枚举取值。</p>
-    </div>
-  </div>
-  <div class="col-r vlist">
-    <div class="card g">
-      <h4>项目工作区</h4>
-      <p>任务分解。</p>
-      <p>计划调整与追踪。</p>
-      <p>项目甘特图。</p>
-    </div>
-    <div class="card p">
-      <h4>界面图在上游</h4>
-      <p>列表、任务表、甘特各有一张截图，留在 PIS 仓库的 files/，这里不转载。</p>
-    </div>
-  </div>
-</div>
-</div>
-
-<div class="note"><b>工作区组成：</b>架构图里写的是甘特图、任务表、设置、对话框。本讲不另造路由或页签名称。</div>
-
----
-
-<div class="title"><span class="no">03</span>主要功能 · 工作分解</div>
+<div class="title"><span class="no">03</span>任务分解</div>
 <div class="gist">任务只有三种：<em>汇总 / 工作项 / 里程碑</em>。结构一变，WBS 按显示顺序重算；缩进时把依赖<em class="g">转接</em>到新子任务。</div>
 
 <div class="content">
 <div class="cols">
   <div class="col-l vlist">
     <div class="grid" style="height:auto;">
-      <div class="card"><h4>SUMMARY</h4><p>汇总。父节点日期要汇总。</p></div>
-      <div class="card g"><h4>TASK</h4><p>工作项。行内改时长与进度。</p></div>
+      <div class="card"><h4>SUMMARY</h4><p>汇总。新增时自动带一个空的子任务。</p></div>
+      <div class="card g"><h4>TASK</h4><p>工作项。行内改时长、资源、进度。</p></div>
       <div class="card p"><h4>MILESTONE</h4><p>里程碑。甘特上用菱形。</p></div>
     </div>
     <div class="card">
@@ -477,278 +417,311 @@ section.cover .meta { position: absolute; bottom: 42px; left: 64px; right: 64px;
   <div class="col-r vlist">
     <div class="card o">
       <h4>缩进时转接依赖</h4>
-      <p>上一兄弟若还不是汇总，先提升为 SUMMARY，再把原来挂在它身上的依赖边转到新子任务，避免后继突然失去前级。</p>
+      <p>上一兄弟若还不是汇总，先提升为 SUMMARY，再把原来挂在它身上的依赖边转到新子任务。</p>
     </div>
     <div class="card">
-      <h4>插入同级的默认前级</h4>
-      <p>未手选时，继承显示顺序里最近一个能进依赖图的任务。开工会除外的初验点不作为自动前级。</p>
+      <h4>依赖要连成一条路</h4>
+      <p>按逻辑依赖和资源依赖设置前后关系，使任务形成从开头到终点的完整路径。</p>
     </div>
   </div>
 </div>
 </div>
 
-<div class="note"><b>资源仍是自由文本。</b>换成成员分配是下一步，当前未实现。</div>
+<div class="note"><b>下一页是任务表原图。</b>资源仍是自由文本。成员分配不在当前功能里。</div>
 
 ---
 
-<div class="title"><span class="no">03</span>主要功能 · 依赖、甘特，以及没接上的界面</div>
-<div class="gist">依赖<em>只创建 FS</em>，不能成环，并且必须有从起点到终点的路径。甘特是自研时间轴；顶栏三个入口<em class="r">还没有链接</em>。</div>
+<!-- _class: shot -->
+
+<div class="title"><span class="no">03</span>WBS 任务表</div>
+<div class="gist">项目工作区里的任务表，支持<em>行内编辑</em>。名称、时长、资源、前级依赖和进度都在这张表上改。</div>
+
+<div class="content">
+  <img class="ui" src="assets/wps.png" alt="项目工作区：WBS 任务表与行内编辑" />
+</div>
+
+---
+
+<div class="title"><span class="no">03</span>跟踪、调整，以及甘特图</div>
+<div class="gist">调整走<em>时长和依赖</em>，不直接改起止。改完自动重算相关任务，并尽量保证<em class="o">关键任务不被延迟</em>。</div>
 
 <div class="content">
 <div class="cols">
   <div class="col-l vlist">
     <div class="card">
-      <h4>依赖三条</h4>
-      <p>类型只创建 FS。不能成环。必须有从起点走到终点的路径。</p>
+      <h4>颜色先报风险</h4>
+      <p>已延期、即将延期、有进展、已完成，用不同颜色标识。延期要提前看见。</p>
     </div>
     <div class="card g">
-      <h4>甘特上有什么</h4>
+      <h4>粗计划要变细</h4>
+      <p>随着时间推移，把以前的粗粒度计划拆成更细的任务。</p>
+    </div>
+    <div class="card o">
+      <h4>改完就重算</h4>
+      <p>不直接改开始和结束时间。每次调整后，重算相关依赖任务的起止。</p>
+    </div>
+  </div>
+  <div class="col-r">
+    <div class="card" style="height:100%;">
+      <h4>甘特图上有什么</h4>
       <ul class="tight">
-        <li>左 WBS，右按日时间轴；周末与节假日用底色区分</li>
-        <li>条形 = 任务（关键路径、已完成不同色，条内按进度填充）</li>
-        <li>菱形 = 里程碑；SVG 折线 = 依赖</li>
+        <li>左 WBS，右按日时间轴</li>
+        <li>周末与节假日用底色区分</li>
+        <li>条形 = 任务；关键路径、已完成不同色，条内按进度填充</li>
+        <li>菱形 = 里程碑</li>
+        <li>SVG 折线 = 依赖</li>
         <li>虚线标出开工会、初验点、今日</li>
       </ul>
     </div>
   </div>
-  <div class="col-r">
-    <div class="card r" style="height:100%;">
-      <h4>尚未做成（未实现）</h4>
-      <p>「资源」「审计」「用户」没有链接。</p>
-      <p>用户区写死 zhenggsh /「SSO 已登录」。</p>
-      <p>退出、个人设置没有处理函数。</p>
-      <p>没有登录页、成员邀请或角色鉴权。</p>
-      <p>甘特当前是只读时间轴加点击编辑。拖拽改依赖、虚拟化、本地预览都还没有。</p>
-    </div>
-  </div>
 </div>
 </div>
 
-<div class="note"><b>编辑都走服务端：</b>浏览器不跑排期引擎。打开工作区时 loadWorkspace 会再算一次，图上的日期以当次计算结果为准。</div>
+<div class="note"><b>下一页是甘特原图。</b>自研渲染，不是外挂控件。</div>
 
 ---
 
-<div class="title"><span class="no">04</span>架构 · 从浏览器到 SQLite</div>
-<div class="gist">写操作进 Server Action，事务里<em>变更 → 校验 → 重算 → 回写 → 审计</em>。排期和 V1–V4 是<em class="p">零 IO 纯函数</em>，视图层再算一遍但不落库。</div>
+<!-- _class: shot -->
+
+<div class="title"><span class="no">03</span>甘特图</div>
+<div class="gist">左侧是 <em>WBS</em>，右侧是按日时间轴和<em class="g">依赖箭头</em>。条形、菱形、虚线分别对应任务、里程碑和开工会 / 初验点 / 今日。</div>
 
 <div class="content">
-<div class="cols">
-  <div class="col-l">
-    <div class="stack">
-      <div class="card"><h4>浏览器</h4><p>ProjectList / Workspace：甘特图、任务表、设置、对话框</p></div>
-      <div class="card p"><h4>server/actions/*</h4><p>入参检查与 revalidatePath · "use server"</p></div>
-      <div class="card"><h4>server/plan.ts</h4><p>事务：变更 → 校验 → 重算 → 回写派生字段 → 审计</p></div>
-      <div class="card g"><h4>server/workspace.ts</h4><p>读库后再算一遍排期，组装视图（不落库）</p></div>
-      <div class="card o"><h4>lib/scheduler · lib/validation</h4><p>日历、拓扑、正逆推、汇总展开、冲击报告；V1–V4</p></div>
-      <div class="card r"><h4>SQLite</h4><p>Prisma 7 + better-sqlite3 · DATABASE_URL 缺省 file:./dev.db</p></div>
-    </div>
-  </div>
-  <div class="col-r vlist">
-    <div class="card">
-      <h4>技术栈</h4>
-      <p>Next.js 16.4.4 · React 19.3</p>
-      <p>TypeScript · Tailwind CSS 4</p>
-      <p>Prisma 7.10 · Vitest 4</p>
-    </div>
-    <div class="card p">
-      <h4>zod 装了，还没被引用</h4>
-      <p>src/ 下没有引用。空名称、日期格式、初验不早于开工会、枚举取值，写在各个 Action 里。</p>
-    </div>
-    <div class="card o">
-      <h4>better-sqlite3</h4>
-      <p>next.config.ts 把它标为服务端外部包。生产库仍是 SQLite。</p>
-    </div>
-  </div>
+  <img class="ui" src="assets/gatt.png" alt="甘特图：左侧 WBS 列，右侧按日时间轴与依赖箭头" />
 </div>
-</div>
-
-<div class="note"><b>页面：</b>dynamic = "force-dynamic"。写成功后 revalidatePath。客户端每次编辑都等服务端往返。</div>
 
 ---
 
-<div class="title"><span class="no">04</span>架构 · 一条事务写完</div>
-<div class="gist"><em>applyPlanChange</em> 在同一条事务里读旧计划、改数据、复算校验、重算并回写。阻断项或未确认的建议项抛 <em class="r">PlanValidationFailure</em>，整单回滚。</div>
+<div class="title"><span class="no">03</span>团队管理 · 目标形态，尚未做成</div>
+<div class="gist">主要功能里写了成员和看板。§4.4 说 v1 <em class="r">未启用登录</em>，成员只是预留；下一步第 1 条仍是<em class="o">增加团队管理</em>。所以记为未实现。</div>
 
 <div class="content">
 <div class="cols">
   <div class="col-l vlist">
-    <div class="card">
-      <h4>事务六步</h4>
-      <ul class="tight">
-        <li>读变更前计划</li>
-        <li>执行 mutate</li>
-        <li>用同一份 validatePlan 复算</li>
-        <li>阻断，或建议项未确认 → 回滚</li>
-        <li>computeSchedule，回写派生字段</li>
-        <li>插入 AuditLog</li>
-      </ul>
-    </div>
-    <div class="card g">
-      <h4>回写的派生字段</h4>
-      <p>plannedStart · plannedEnd · isCritical · totalFloatDays · scheduleSource</p>
-    </div>
-  </div>
-  <div class="col-r vlist">
-    <div class="card p">
-      <h4>引擎模块</h4>
-      <ul class="tight">
-        <li><b>calendar.ts</b> 工作日判断与加减；工期含首日</li>
-        <li><b>topo.ts</b> Kahn 拓扑，返回环</li>
-        <li><b>dependency-expand.ts</b> 依赖汇总节点展开成叶子边</li>
-        <li><b>impact.ts</b> 余量差、日期变化、新旧关键任务</li>
-      </ul>
-    </div>
-    <div class="card o">
-      <h4>权威在服务端</h4>
-      <p>选前级时，前端会排除自身和后代。环的最终判定仍在服务端。V5 / V6 扫描未实现。</p>
-    </div>
-  </div>
-</div>
-</div>
-
-<div class="note"><b>单测已覆盖：</b>单链 FS、滞后、菱形会合、节假日、MSO 吸附、环、余量正/零/负、初验锚定与被前级驱动、汇总 roll-up、依赖汇总节点。V1–V4 的主要正反例也有。</div>
-
----
-
-<div class="title"><span class="no">04</span>架构 · 表已经在，登录还没接</div>
-<div class="gist">七张表都在 schema 里。注释写明 <em>v1 未启用登录</em>：用户和成员只是预留，业务代码<em class="r">不创建用户、不检查角色</em>。</div>
-
-<div class="content">
-<div class="cols">
-  <div class="col-l vlist">
-    <div class="card">
-      <h4>已建表</h4>
-      <div class="chips">
-        <span class="chip">User</span><span class="chip">ProjectMember</span><span class="chip">Project</span>
-        <span class="chip">Holiday</span><span class="chip">Task</span><span class="chip">Dependency</span>
-        <span class="chip p">AuditLog</span>
-      </div>
-    </div>
-    <div class="card o">
-      <h4>模型上的空位（未实现）</h4>
-      <ul class="tight">
-        <li>资源是 Task.assignee 字符串，没有 TaskAssignee</li>
-        <li>没有基线表，没有扫描报告表</li>
-        <li>Task.version 有字段，更新未按 version 条件写入</li>
-        <li>AuditLog 无操作者外键，影响放在 payload JSON</li>
-      </ul>
-    </div>
-  </div>
-  <div class="col-r vlist">
-    <div class="card p">
-      <h4>库与脚本</h4>
-      <p>Prisma Client 生成到 src/generated/prisma（已 gitignore）。</p>
-      <p>没有 prisma/migrations。</p>
-      <p>脚本是 db:push / db:studio。</p>
-    </div>
-    <div class="card">
-      <h4>代码落点</h4>
-      <p>页面 src/app</p>
-      <p>工作区 src/components/workspace</p>
-      <p>列表 src/components/project</p>
-    </div>
     <div class="card r">
-      <h4>测试边界</h4>
-      <p>只有排期和校验两组 Vitest。没有 Server Action、WBS 重编号或界面测试。</p>
+      <h4>成员管理 · 未实现</h4>
+      <p>项目下的成员和组织：添加、删除、修改成员信息。</p>
+    </div>
+    <div class="card o">
+      <h4>看板布局 · 未实现</h4>
+      <p>按团队或成员做工作台。</p>
+      <p>左侧 30%：已完成任务。</p>
+      <p>右侧 70%：待办任务。</p>
+    </div>
+  </div>
+  <div class="col-r">
+    <div class="card" style="height:100%;">
+      <h4>为什么还不算已有</h4>
+      <ul class="tight">
+        <li>数据模型里 User、ProjectMember 只是预留</li>
+        <li>v1 未启用登录</li>
+        <li>下一步明确还要「增加团队管理」</li>
+        <li>下一页只说明待办区打算怎么分，不是现成界面</li>
+      </ul>
     </div>
   </div>
 </div>
 </div>
 
-<div class="note"><b>提交记录：</b>近期是脚手架初始化，加上当前这一版计划功能（init），没有更细的功能分批记录。</div>
+<div class="note"><b>不要把它当成已经能用的页面。</b>下面的四象限是上游写出的目标分法。</div>
 
 ---
 
-<div class="title"><span class="no">05</span>下一步 · 先把已经写了一半的接上</div>
-<div class="gist">这四件都是<em>代码里已经露出</em>的缺口，当前都是<em class="r">未实现</em>。模型和日志在，产品和入口还不在。</div>
+<div class="title"><span class="no">03</span>成员看板 · 待办四象限（未实现）</div>
+<div class="gist">待办区按四象限放（上游原文写作「四现象法」）。左上必须做完，右上不能拖成紧急，左下是被驱动的，右下只是关注。</div>
 
 <div class="content">
 <div class="vlist">
   <div class="grid">
     <div class="card r">
-      <h4>1 · 真实身份与权限</h4>
-      <p>User、ProjectMember、Role（OWNER / PM / MEMBER / VIEWER）已建模，Action 未使用。任何人打开就能写。先接登录，再在 runChange 按角色拒绝越权。</p>
+      <h4>第一象限 · 左上</h4>
+      <p>重要且紧急。已经延期，以及 1 天内即将延期。这里必须完成。</p>
     </div>
     <div class="card o">
-      <h4>2 · 把审计展示出来</h4>
-      <p>applyPlanChange 已记下 action、目标、确认过的规则编号和冲击摘要，但没有读取界面。审计页至少按项目、时间倒序展示这些 payload。</p>
+      <h4>第二象限 · 右上</h4>
+      <p>重要不紧急。未到延期的设计、预演。可以从容做完，不能拖成左上。</p>
     </div>
   </div>
   <div class="grid">
     <div class="card">
-      <h4>3 · 补齐并发控制</h4>
-      <p>Task.version 已在，更新没有 where: { id, version }，也没有冲突后的刷新提示。后写会覆盖先写。乐观锁可以直接落在 applyPlanChange。</p>
+      <h4>第三象限 · 左下</h4>
+      <p>紧急不重要。作为第 2 责任人、即将延期的工作。被驱动着完成。</p>
     </div>
-    <div class="card g">
-      <h4>4 · 汇总进度与引擎一致</h4>
-      <p>computeSchedule 会按子节点工期加权算出汇总 progressPct，persistSchedule 不写该字段。要么回写派生进度，要么视图改用当次排期结果。</p>
+    <div class="card p">
+      <h4>第四象限 · 右下</h4>
+      <p>不重要不紧急。其他工作，关注即可。</p>
     </div>
   </div>
 </div>
 </div>
 
-<div class="note"><b>产品现象：</b>顶栏「资源 / 审计 / 用户」不可点击。确认后写入审计，用户目前看不见。</div>
+<div class="note"><b>未实现。</b>左侧 30% 的「已完成任务」不进这四个象限。</div>
 
 ---
 
-<div class="title"><span class="no">05</span>下一步 · 校验、测试、预览，以及尚未编码</div>
-<div class="gist">后四件同样是缺口：<em>zod 未调用</em>、<em class="o">事务分支没有测试</em>、<em>甘特不能本地预览</em>，以及设计文档里<em class="r">还没写进代码</em>的能力。</div>
+<!-- _class: shot -->
+
+<div class="title"><span class="no">04</span>系统架构</div>
+<div class="gist">四层与三条连线和上游 flowchart 相同：<em>界面 → 服务端</em>，再分到<em class="p">领域规则</em>和<em class="g">SQLite</em>。胶片改成从左到右，避免竖图缩得看不清。</div>
+
+<div class="content">
+  <img src="assets/arch.png" alt="系统架构：浏览器界面、服务端、领域规则、SQLite" />
+</div>
+
+---
+
+<div class="title"><span class="no">04</span>四层各自做什么，读写怎么走</div>
+<div class="gist">界面只展示和收集输入。<em>服务端是唯一读写入口</em>。排期和校验是<em class="p">纯函数</em>，可以单独测试。日期以当次重算结果为准。</div>
+
+<div class="content">
+<div class="cols">
+  <div class="col-l vlist">
+    <div class="card"><h4>浏览器界面</h4><p>项目列表，以及工作区里的任务表、甘特图、设置、对话框。不直接访问数据库。</p></div>
+    <div class="card p"><h4>服务端</h4><p>检查入参，串联「校验 → 重算 → 回写 → 记录变更」。</p></div>
+    <div class="card g"><h4>领域规则 / 数据</h4><p>排期引擎、计划校验。SQLite 单文件，存项目、任务、依赖、节假日和变更记录。</p></div>
+  </div>
+  <div class="col-r vlist">
+    <div class="card">
+      <h4>读 · 打开项目</h4>
+      <p>取数 → 用规则再算一遍排期 → 组装视图。页面上的日期是当次算出的。</p>
+    </div>
+    <div class="card o">
+      <h4>写 · 改计划</h4>
+      <p>先检查入参，再校验并重算。通过后才落库、记一条变更、通知界面刷新。</p>
+    </div>
+    <div class="card r">
+      <h4>校验不通过</h4>
+      <p>阻止写入并回滚，把原因返回界面。若只是「建议遵循」，要用户确认后再交一次。</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="note"><b>目录和分层对齐：</b>app 页面、components 界面、server 读写、lib 规则、prisma 数据模型。</div>
+
+---
+
+<div class="title"><span class="no">04</span>目录与技术栈</div>
+<div class="gist">一门语言贯穿前后端。<em class="p">计划规则写成纯函数</em>，用 Vitest 锁住。zod 已在依赖里，<em class="o">还没接到入口</em>。</div>
+
+<div class="content">
+<div class="cols">
+  <div class="col-l">
+    <div class="card" style="height:100%;">
+      <h4>目录</h4>
+      <ul class="tight">
+        <li><b>src/app</b> 路由和页面装配，不含业务规则</li>
+        <li><b>src/components</b> 列表、工作区、通用小件</li>
+        <li><b>src/server</b> 唯一读写入口</li>
+        <li><b>src/lib</b> 排期与校验，测试用同一份</li>
+        <li><b>prisma</b> 一个 schema。SQLite 单文件，同步建表</li>
+        <li><b>docs / mydoc / public</b> 设计文档、本说明与配图、静态资源</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-r vlist">
+    <div class="card"><h4>框架</h4><p>Next.js 前后端一体。React + TypeScript 描述 WBS 和依赖。Tailwind 统一任务表、甘特和对话框。</p></div>
+    <div class="card g"><h4>数据与测试</h4><p>Prisma + SQLite，适合小团队自托管。Vitest 覆盖排期与校验。</p></div>
+    <div class="card o"><h4>zod · 尚未接到入口</h4><p>打算一处定义、前后端复用。当前校验仍写在各个操作入口里。</p></div>
+  </div>
+</div>
+</div>
+
+<div class="note"><b>不另报版本号。</b>上游这次只说明每项技术做什么，没有写具体版本。</div>
+
+---
+
+<!-- _class: shot -->
+
+<div class="title"><span class="no">04</span>数据架构</div>
+<div class="gist">围绕 <em>项目 → 任务树 → 依赖</em>。节假日、成员、变更记录挂在项目上；User 通过 ProjectMember 参与项目。</div>
+
+<div class="content">
+  <img src="assets/data-model.png" alt="数据架构：Project、Task、Dependency、Holiday、ProjectMember、User、AuditLog" />
+</div>
+
+---
+
+<div class="title"><span class="no">04</span>对象里有什么，什么还没落地</div>
+<div class="gist">任务起止、是否关键、总余量由<em class="g">排期引擎写入</em>。依赖 v1 <em>只用 FS</em>。登录、基线、扫描报告、任务分配表是<em class="r">未实现</em>。</div>
 
 <div class="content">
 <div class="cols">
   <div class="col-l vlist">
     <div class="card">
-      <h4>5 · 用上已安装的 zod（未实现）</h4>
-      <p>字段格式交给 zod，业务规则仍交给 validatePlan。把 CreateProjectInput、UpdateTaskInput 收成共享 schema。</p>
-    </div>
-    <div class="card o">
-      <h4>6 · 扩大测试面（未实现）</h4>
-      <p>缺事务回滚、WBS 重编号、缩进时的依赖转接、自动前级、初验锚点不可删。集中在 server/plan.ts 与 server/actions/task.ts。</p>
-    </div>
-    <div class="card p">
-      <h4>7 · 甘特本地预览（未实现）</h4>
-      <p>图是只读时间轴加点击编辑，不能拖拽改依赖，也没有虚拟化。提交前可用同一份 computeSchedule / validatePlan 做本地预览。</p>
+      <h4>已经建模的</h4>
+      <ul class="tight">
+        <li><b>Project</b> 名称代号、状态、开工会、初验点、工作日历、叶子工期上限</li>
+        <li><b>Task</b> 汇总 / 工作项 / 里程碑；父子组成 WBS</li>
+        <li><b>Dependency</b> 前置、后续、FS、滞后天数；同一组唯一</li>
+        <li><b>Holiday</b> 按日期跳过非工作日</li>
+        <li><b>AuditLog</b> 每次写操作留一条快照</li>
+      </ul>
     </div>
   </div>
-  <div class="col-r">
-    <div class="card r" style="height:100%;">
-      <h4>8 · 尚未编码，且要改 README</h4>
-      <ul class="tight">
-        <li>基线快照与对比</li>
-        <li>发布前的全图复检</li>
-        <li>V5 / V6 扫描（aiScanEnabled 默认关闭）</li>
-        <li>SS / FF / SF</li>
-        <li>自由文本资源换成成员分配</li>
-        <li>PNG / Excel 导出</li>
-      </ul>
-      <p>生产库仍是 SQLite，且没有 migration 目录。README 应写明 DATABASE_URL、npm run db:push，以及当前已实现范围。</p>
+  <div class="col-r vlist">
+    <div class="card r">
+      <h4>预留，未启用</h4>
+      <p>User、ProjectMember 记录谁以什么角色参与。v1 未启用登录。</p>
+    </div>
+    <div class="card o">
+      <h4>设计有，v1 没落地</h4>
+      <p>基线快照、计划质量扫描报告、任务分配表。</p>
+    </div>
+    <div class="card">
+      <h4>删除会带走什么</h4>
+      <p>删项目会级联删除任务、依赖、节假日和变更记录。任务树以开工会为根。</p>
     </div>
   </div>
 </div>
 </div>
 
-<div class="note"><b>边界：</b>不要把设计文档中的认证、基线和外部模型当成已经可用。</div>
+<div class="note"><b>人工填报的字段：</b>资源、进度、进展描述。计划起止不是手填进这些派生字段的。</div>
+
+---
+
+<div class="title"><span class="no">05</span>下一步 · 只这三件</div>
+<div class="gist">上游把下一步收成三条，三条都还没做。团队管理写在功能章里，<em class="r">落地状态仍看这一条</em>。</div>
+
+<div class="content">
+<div class="vlist">
+  <div class="card r">
+    <h4>1 · 增加团队管理（未实现）</h4>
+    <p>管理团队、用户和看板。对应前面的成员管理、组织，以及 30/70 的四象限工作台。</p>
+  </div>
+  <div class="card o">
+    <h4>2 · 增加项目文档管理（未实现）</h4>
+    <p>项目各阶段关联的文档，加上版本控制和评审过程。</p>
+  </div>
+  <div class="card">
+    <h4>3 · 项目审计管理（未实现）</h4>
+    <p>项目进展核算、资源成本核算等。</p>
+  </div>
+</div>
+</div>
+
+<div class="note"><b>不要沿用旧清单。</b>这次没有再列登录改造细则、乐观锁、导出格式或外部模型。</div>
 
 ---
 
 <div class="title"><span class="no">06</span>收束</div>
-<div class="gist">先把计划方法说清楚，再落到产品：<em>开工会</em>是起点，<em class="o">初验点</em>是要守住的终点，中间用 WBS 和 FS 排开——改时长或依赖，就重算一次。</div>
+<div class="gist">先把计划方法说清楚，再落到产品：<em>开工会</em>是起点，调整只动时长和依赖，甘特图把结果画出来。</div>
 
 <div class="content">
 <div class="grid">
   <div class="card g">
-    <h4>经验</h4>
-    <p>WBS 要可测量、同级并列、渐进明细。只调时长和依赖。延期用赶工六条。最终目标不能擅自改。</p>
+    <h4>已经写进产品的</h4>
+    <p>项目列表，WBS 与行内编辑，从开头走到终点的依赖，颜色标识延期，自研甘特。配图各占一页。</p>
   </div>
   <div class="card">
-    <h4>已经能用</h4>
-    <p>项目列表、多层 WBS、FS 依赖、工作日排期、初验冲击、自研甘特。起止由引擎推算。</p>
+    <h4>架构就四层</h4>
+    <p>界面、服务端、纯函数规则、SQLite。打开项目会重算；写入失败会回滚。</p>
   </div>
   <div class="card r">
     <h4>未实现</h4>
-    <p>登录与角色、审计页、乐观锁、汇总进度回写、zod、基线、V5/V6、SS/FF/SF、成员分配、PNG/Excel、本地预览。</p>
+    <p>团队与看板、登录、zod 入口、基线、扫描报告、任务分配、项目文档、项目审计。</p>
   </div>
 </div>
 </div>
 
-<div class="note"><b>溯源：</b>iksm/02-PIS-Project/PIS_intro.md ← zhenggsh/PIS mydoc/PIS_intro.md。版本仍是 v1.0.0，按当次指令就地刷新，不另开版本目录。</div>
+<div class="note"><b>溯源：</b>iksm/02-PIS-Project/PIS_intro.md ← zhenggsh/PIS mydoc/PIS_intro.md。版本仍是 v1.0.0，就地刷新，不另开版本目录。</div>
