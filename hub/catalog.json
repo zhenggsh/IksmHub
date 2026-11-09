@@ -1,0 +1,97 @@
+{
+  "repo": "zhenggsh/IksmHub",
+  "branch": "master",
+  "htmlPreviewPrefix": "https://htmlpreview.github.io/?",
+  "note": "清单只收录当前分支上真实存在的 iksm/、marp/、output/ 路径。同一胶片 ID 的 marp 与 output 按版本号对齐。",
+  "themes": [
+    {
+      "id": "01",
+      "name": "工作方法",
+      "path": "iksm/01-工作方法",
+      "documents": [
+        {
+          "title": "工作方法论",
+          "path": "iksm/01-工作方法/workmethod/工作方法论.md",
+          "html": "output/001-工作方法/v1.0.0/slides.html",
+          "deckId": "001",
+          "version": "v1.0.0"
+        }
+      ],
+      "files": [
+        "iksm/01-工作方法/workmethod/工作方法论.md",
+        "iksm/01-工作方法/workmethod/wiz_imgloc.json",
+        "iksm/01-工作方法/workmethod/wiz_style.json",
+        "iksm/01-工作方法/workmethod/wiz_tree.json",
+        "iksm/01-工作方法/workmethod/wiz_tree2.json",
+        "iksm/01-工作方法/workmethod/wiz_tree_pretty.json",
+        "iksm/01-工作方法/workmethod/工作方法论_files/099958b9-ec21-4ca3-8618-8105a3ca2528.png",
+        "iksm/01-工作方法/workmethod/工作方法论_files/c3b7c746-e1fa-4bf7-a976-6874c10c67eb.png",
+        "iksm/01-工作方法/workmethod/工作方法论_files/dade8374-db2a-4d25-bf0a-555756408a29.png",
+        "iksm/01-工作方法/workmethod/工作方法论_files/eff1ff1f-f0cb-499c-9928-828113035003.png"
+      ]
+    },
+    {
+      "id": "02",
+      "name": "PIS Project",
+      "path": "iksm/02-PIS-Project",
+      "documents": [
+        {
+          "title": "Project InSight（PIS）",
+          "path": "iksm/02-PIS-Project/PIC_intro.md",
+          "html": "output/002-PIS-Project/v1.0.0/slides.html",
+          "deckId": "002",
+          "version": "v1.0.0"
+        }
+      ],
+      "files": [
+        "iksm/02-PIS-Project/PIC_intro.md"
+      ]
+    }
+  ],
+  "decks": [
+    {
+      "id": "001",
+      "name": "工作方法",
+      "marpPath": "marp/001-工作方法",
+      "outputPath": "output/001-工作方法",
+      "versions": [
+        {
+          "version": "v1.0.0",
+          "marp": "marp/001-工作方法/v1.0.0/slides.md",
+          "output": "output/001-工作方法/v1.0.0/slides.html",
+          "iksmSource": "iksm/01-工作方法/workmethod/工作方法论.md",
+          "slideCount": 22,
+          "marpAssets": [
+            "marp/001-工作方法/v1.0.0/assets/swot分析.png",
+            "marp/001-工作方法/v1.0.0/assets/swot策略.png",
+            "marp/001-工作方法/v1.0.0/assets/五看三定.png",
+            "marp/001-工作方法/v1.0.0/assets/沟通模型.png"
+          ],
+          "outputAssets": [
+            "output/001-工作方法/v1.0.0/assets/swot分析.png",
+            "output/001-工作方法/v1.0.0/assets/swot策略.png",
+            "output/001-工作方法/v1.0.0/assets/五看三定.png",
+            "output/001-工作方法/v1.0.0/assets/沟通模型.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "002",
+      "name": "PIS Project",
+      "marpPath": "marp/002-PIS-Project",
+      "outputPath": "output/002-PIS-Project",
+      "versions": [
+        {
+          "version": "v1.0.0",
+          "marp": "marp/002-PIS-Project/v1.0.0/slides.md",
+          "output": "output/002-PIS-Project/v1.0.0/slides.html",
+          "iksmSource": "iksm/02-PIS-Project/PIC_intro.md",
+          "slideCount": 16,
+          "marpAssets": [],
+          "outputAssets": []
+        }
+      ]
+    }
+  ]
+}
