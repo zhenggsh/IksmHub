@@ -2,7 +2,7 @@
   "repo": "zhenggsh/IksmHub",
   "branch": "master",
   "htmlPreviewPrefix": "https://htmlpreview.github.io/?",
-  "note": "清单只收录当前分支上真实存在的 iksm/、marp/、output/ 路径。同一胶片 ID 的 marp 与 output 按版本号对齐。",
+  "note": "清单按 PR #5（iksm/03-AOS-Project、marp/003-AOS-Project/v1.0.0、output/003-AOS-Project/v1.0.0）合入 master 之后的真实目录编写。001 与 002 的 v1.0.0、v1.1.0 已在 master；003 只有 v1.0.0。PIS 知识文件为 iksm/02-PIS-Project/PIS_intro.md。同一胶片 ID 的 marp 与 output 按版本号对齐。",
   "themes": [
     {
       "id": "01",
@@ -37,14 +37,47 @@
       "documents": [
         {
           "title": "Project InSight（PIS）",
-          "path": "iksm/02-PIS-Project/PIC_intro.md",
-          "html": "output/002-PIS-Project/v1.0.0/slides.html",
+          "path": "iksm/02-PIS-Project/PIS_intro.md",
+          "html": "output/002-PIS-Project/v1.1.0/slides.html",
           "deckId": "002",
+          "version": "v1.1.0",
+          "exports": [
+            {
+              "version": "v1.0.0",
+              "html": "output/002-PIS-Project/v1.0.0/slides.html"
+            },
+            {
+              "version": "v1.1.0",
+              "html": "output/002-PIS-Project/v1.1.0/slides.html"
+            }
+          ]
+        }
+      ],
+      "files": [
+        "iksm/02-PIS-Project/PIS_intro.md",
+        "iksm/02-PIS-Project/files/gatt.png",
+        "iksm/02-PIS-Project/files/project-info.png",
+        "iksm/02-PIS-Project/files/wps.png"
+      ]
+    },
+    {
+      "id": "03",
+      "name": "AOS Project",
+      "path": "iksm/03-AOS-Project",
+      "documents": [
+        {
+          "title": "AOS（Agent Operation System）系统介绍",
+          "path": "iksm/03-AOS-Project/AOS_intro.md",
+          "html": "output/003-AOS-Project/v1.0.0/slides.html",
+          "deckId": "003",
           "version": "v1.0.0"
         }
       ],
       "files": [
-        "iksm/02-PIS-Project/PIC_intro.md"
+        "iksm/03-AOS-Project/AOS_intro.md",
+        "iksm/03-AOS-Project/files/定义中心-模型.png",
+        "iksm/03-AOS-Project/files/定义中心-测试.png",
+        "iksm/03-AOS-Project/files/运行中心-运行.png"
       ]
     }
   ],
@@ -86,10 +119,74 @@
           "version": "v1.0.0",
           "marp": "marp/002-PIS-Project/v1.0.0/slides.md",
           "output": "output/002-PIS-Project/v1.0.0/slides.html",
-          "iksmSource": "iksm/02-PIS-Project/PIC_intro.md",
-          "slideCount": 16,
-          "marpAssets": [],
-          "outputAssets": []
+          "iksmSource": "iksm/02-PIS-Project/PIS_intro.md",
+          "slideCount": 23,
+          "marpAssets": [
+            "marp/002-PIS-Project/v1.0.0/assets/arch.png",
+            "marp/002-PIS-Project/v1.0.0/assets/data-model.png",
+            "marp/002-PIS-Project/v1.0.0/assets/gatt.png",
+            "marp/002-PIS-Project/v1.0.0/assets/project-info.png",
+            "marp/002-PIS-Project/v1.0.0/assets/wps.png"
+          ],
+          "outputAssets": [
+            "output/002-PIS-Project/v1.0.0/assets/arch.png",
+            "output/002-PIS-Project/v1.0.0/assets/data-model.png",
+            "output/002-PIS-Project/v1.0.0/assets/gatt.png",
+            "output/002-PIS-Project/v1.0.0/assets/project-info.png",
+            "output/002-PIS-Project/v1.0.0/assets/wps.png"
+          ]
+        },
+        {
+          "version": "v1.1.0",
+          "marp": "marp/002-PIS-Project/v1.1.0/slides.md",
+          "output": "output/002-PIS-Project/v1.1.0/slides.html",
+          "iksmSource": "iksm/02-PIS-Project/PIS_intro.md",
+          "slideCount": 23,
+          "marpAssets": [
+            "marp/002-PIS-Project/v1.1.0/assets/arch.png",
+            "marp/002-PIS-Project/v1.1.0/assets/data-model.png",
+            "marp/002-PIS-Project/v1.1.0/assets/gatt.png",
+            "marp/002-PIS-Project/v1.1.0/assets/project-info.png",
+            "marp/002-PIS-Project/v1.1.0/assets/wps.png"
+          ],
+          "outputAssets": [
+            "output/002-PIS-Project/v1.1.0/assets/arch.png",
+            "output/002-PIS-Project/v1.1.0/assets/data-model.png",
+            "output/002-PIS-Project/v1.1.0/assets/gatt.png",
+            "output/002-PIS-Project/v1.1.0/assets/project-info.png",
+            "output/002-PIS-Project/v1.1.0/assets/wps.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "003",
+      "name": "AOS Project",
+      "marpPath": "marp/003-AOS-Project",
+      "outputPath": "output/003-AOS-Project",
+      "versions": [
+        {
+          "version": "v1.0.0",
+          "marp": "marp/003-AOS-Project/v1.0.0/slides.md",
+          "output": "output/003-AOS-Project/v1.0.0/slides.html",
+          "iksmSource": "iksm/03-AOS-Project/AOS_intro.md",
+          "slideCount": 28,
+          "marpAssets": [
+            "marp/003-AOS-Project/v1.0.0/assets/layers.png",
+            "marp/003-AOS-Project/v1.0.0/assets/modules.png",
+            "marp/003-AOS-Project/v1.0.0/assets/run-sequence.png",
+            "marp/003-AOS-Project/v1.0.0/assets/定义中心-模型.png",
+            "marp/003-AOS-Project/v1.0.0/assets/定义中心-测试.png",
+            "marp/003-AOS-Project/v1.0.0/assets/运行中心-运行.png"
+          ],
+          "outputAssets": [
+            "output/003-AOS-Project/v1.0.0/assets/layers.png",
+            "output/003-AOS-Project/v1.0.0/assets/modules.png",
+            "output/003-AOS-Project/v1.0.0/assets/run-sequence.png",
+            "output/003-AOS-Project/v1.0.0/assets/定义中心-模型.png",
+            "output/003-AOS-Project/v1.0.0/assets/定义中心-测试.png",
+            "output/003-AOS-Project/v1.0.0/assets/运行中心-运行.png"
+          ]
         }
       ]
     }

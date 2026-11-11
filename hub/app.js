@@ -112,7 +112,12 @@
   function renderThemes() {
     const cards = [];
     state.catalog.themes.forEach((theme, index) => {
-      const blob = [theme.name, theme.path, ...theme.documents.map((doc) => doc.title + " " + doc.path)].join(" ").toLowerCase();
+      const bits = [theme.name, theme.path];
+      theme.documents.forEach((doc) => {
+        bits.push(doc.title, doc.path);
+        htmlExports(doc).forEach((item) => bits.push(item.version, item.html));
+      });
+      const blob = bits.join(" ").toLowerCase();
       if (state.query && !blob.includes(state.query)) return;
       const card = el("article", { class: "card", style: "--d:" + index });
       card.append(
@@ -122,19 +127,23 @@
         el("p", { class: "path" }, theme.path)
       );
       theme.documents.forEach((doc) => {
+        const exports = htmlExports(doc);
         const block = el("div", { class: "doc" });
         const actions = el("div", { class: "actions" });
-        actions.append(
-          button("看 MD", "btn", () => openPath("md", doc.path)),
-          doc.html
-            ? button("看 HTML", "btn btn-solid", () => openPath("html", doc.html))
-            : button("看 HTML", "btn btn-solid", null)
-        );
-        if (!doc.html) actions.lastChild.disabled = true;
+        actions.append(button("看 MD", "btn", () => openPath("md", doc.path)));
+        if (!exports.length) {
+          actions.append(button("看 HTML", "btn btn-solid", null));
+        } else if (exports.length === 1) {
+          actions.append(button("看 HTML", "btn btn-solid", () => openPath("html", exports[0].html)));
+        } else {
+          exports.forEach((item) => {
+            actions.append(button("看 HTML · " + item.version, "btn btn-solid", () => openPath("html", item.html)));
+          });
+        }
         block.append(
           el("h3", {}, doc.title),
           el("p", { class: "path" }, doc.path),
-          el("p", { class: "muted" }, doc.deckId ? "对应导出 " + doc.deckId + " · " + doc.version : "尚无对应导出"),
+          el("p", { class: "muted" }, exportNote(doc, exports)),
           actions
         );
         card.append(block);
@@ -143,6 +152,20 @@
       cards.push(card);
     });
     fillPanel(panels.themes, cards, "没有匹配的知识主题。");
+  }
+
+  function htmlExports(doc) {
+    if (Array.isArray(doc.exports) && doc.exports.length) {
+      return doc.exports.filter((item) => item && item.html);
+    }
+    if (doc.html) return [{ version: doc.version, html: doc.html }];
+    return [];
+  }
+
+  function exportNote(doc, exports) {
+    if (!exports.length || !doc.deckId) return "尚无对应导出";
+    const versions = exports.map((item) => item.version).filter(Boolean);
+    return "对应导出 " + doc.deckId + " · " + versions.join("、");
   }
 
   function renderDecks() {
@@ -425,7 +448,11 @@
     for (const theme of state.catalog.themes) {
       for (const doc of theme.documents) {
         if (doc.path === path) return { title: doc.title, kicker: "知识主题 · " + theme.id + " " + theme.name };
-        if (doc.html === path) return { title: doc.title, kicker: "导出 HTML · " + (doc.deckId || "") + " " + (doc.version || "") };
+        for (const item of htmlExports(doc)) {
+          if (item.html === path) {
+            return { title: doc.title, kicker: "导出 HTML · " + (doc.deckId || "") + " " + (item.version || "") };
+          }
+        }
       }
     }
     for (const deck of state.catalog.decks) {
