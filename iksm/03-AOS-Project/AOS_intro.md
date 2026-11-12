@@ -3,7 +3,7 @@
 > 来源：zhenggsh/AOS `mydoc/AOS_intro.md`（文档版本 V1.0，编制日期 2026-11-09）
 > 适用读者：产品、架构、后端、前端、平台工程、安全与测试人员
 > 上位文档：《AOS（Agent Operation System）企业级智能体平台设计——基于 Qwen Code CLI》V1.2、《AOS MVP 系统生成实施规范》V1.0
-> 收录说明：按 IksmHub 知识条目收录，章节顺序与上游一致。三段 mermaid 源码、两处配图相对路径与正文一并保留。§1.4 写明不交付的能力标为未实现、不在 MVP。不补充上游未写的功能。
+> 收录说明：按 IksmHub 知识条目收录，章节顺序与上游一致。三段 mermaid 源码按上游保留。配图沿用本目录 `files/`（与上游 `mydoc/files/` 同一套截图），正文两处图片使用从本文件可解析的相对路径。§1.4 写明不交付的能力标为未实现、不在 MVP。上游 §3.2「执行引擎（execution_engine）」后没有展开，此处不补写。不补充上游未写的功能，也不把建设目标写成已交付能力。
 > 配图：`files/定义中心-测试.png`、`files/运行中心-运行.png` 为正文引用。`files/定义中心-模型.png` 为同目录相关截图，正文未引用，不单列成一节。
 
 本文用于整体介绍 AOS 系统：先说明建设背景与目标，再逐模块说明四个组成部分的职责与边界，最后给出系统架构、目录结构、技术栈和核心数据结构。
@@ -25,12 +25,11 @@
 
 AOS（Agent Operation System）以 **Qwen Code CLI 0.26.4** 作为企业智能体执行底座，构建一套**企业多租户的智能体运营平台**。核心设计立场：
 
-1. **控制面与执行面分离**：控制面负责配置与治理，执行面只接收经过授权、带配置版本号的运行任务。
-2. **工作区即运行边界**：每轮对话启动一次 Headless Qwen 进程，`cwd`、文件挂载、Skill 和会话均绑定到明确的智能体工作区。
-3. **统一事件归一化**：CLI 原始 `stream-json` 事件先归一化为平台事件，再持久化和推送前端，前端不直接依赖 CLI 私有字段。
-4. **失败关闭（fail-closed）**：审批服务不可用、Hook 异常、配置无法校验或沙箱不可用时，禁止执行高风险工具，必要时拒绝启动任务。
-5. **密钥不进入模型上下文**：API Key 只在受控运行目录或进程环境中提供，不写入 `QWEN.md`、提示词、普通日志和前端响应，密钥接口永不回显。
-6. **定义与运行解耦**：定义中心产出不可变的 Agent Package，运行中心与独立后台消费同一份包，保证行为一致。
+1. **设计与运行分离**：设计模块专注于智能体能力开发的集成，可进行有限的测试；运行模块负责智能体执行的管控、沙箱、审批、记忆和迭代等；
+2. **独立的后台运行**：后台智能体不依赖于Web运行，可实现快速的移植、后台能力定制与封装、实现企业级的智能体运行管理。
+3. **监控运营中心**：使用同一的后台监控智能体运行状态、资源用量、异常事件等，提供统一的界面与接口。
+
+> 第 1 条里的「记忆」是立场用词。§1.4 写明企业长期记忆不交付，该项未实现、不在 MVP。第 3 条「使用同一的后台」按上游原文保留。
 
 ### 1.3 建设目标
 
@@ -38,14 +37,14 @@ AOS（Agent Operation System）以 **Qwen Code CLI 0.26.4** 作为企业智能�
 | --- | --- |
 | 统一模型接入 | 租户管理员在 Web 配置多个 OpenAI 兼容模型端点、模型与凭证，并对智能体授权使用 |
 | 工作区隔离 | 每个智能体独立、持久、可版本化的运行目录，租户之间不可互访 |
-| 运行与流式反馈 | 每轮对话启动一次 Headless Qwen 进程，实时返回文本、工具状态、审批请求、错误与用量 |
-| 可持续会话 | 平台保存 Web 会话与 Qwen `session_id` 的映射，后续轮次通过 `--resume` 恢复 |
-| 安全与治理 | 沙箱隔离 + 分级审批 + RBAC + 配额 + 审计；`UNCERTAIN` 状态必须先对账再处理 |
+| 多模式编排 | 实现多种模式的智能体编排，包括顺序、并行、条件、循环、ReAct、Plan-Execute 等模式。其中 Plan-Execute 见 §1.4，未实现、不在 MVP；顺序、并行、条件、循环、ReAct 只记为建设目标，不记为已交付能力 |
+| 工具集成 | 集成各种形式的外部能力，包括公开的API，MCP接口，业务自定义接口等 |
+| 能力开放 | 智能能力通过接口对外提供，实现开放的对外赋能 |
 | 独立运行包 | 每个 Agent 输出为完整目录＋文件，不依赖 Web 进程即可交互执行 |
 
 ### 1.4 首版边界
 
-AOS MVP 聚焦基础闭环的完整实现。下列能力**不交付，未实现，不在 MVP**：多 Agent 自动编排、Plan-Execute、Reflexive Agent、RAG、企业长期记忆、Workflow、跨 Runner 高可用、Responses API，以及 Anthropic／Gemini 原生协议。数据模型保留 `pattern`、`protocol` 等扩展字段，但 API 拒绝非 MVP 值，这些字段不表示已可用功能。
+AOS MVP 聚焦基础闭环的完整实现。下列能力**不交付，未实现，不在 MVP**：多 Agent 自动编排、Plan-Execute、Reflexive Agent、RAG、企业长期记忆、Workflow、跨 Runner 高可用、Responses API，以及 Anthropic／Gemini 原生协议。数据模型保留 `pattern`、`protocol` 等扩展字段，但 API 拒绝非 MVP 值，这些字段不显示为已可用功能。
 
 ---
 
@@ -77,7 +76,7 @@ flowchart LR
 | Skill 管理 | 上传、校验、版本、绑定、原子同步与漂移检测 |
 | Agent 定义 | 草稿编辑、配置版本、绑定模型／工具／Skill、生成参数「模型默认 ⊕ Agent 覆盖」 |
 | 开发测试 | 在定义中心内直接发起测试会话，查看脱敏原始报文与结构化调用链 |
-| 发布 | 版本化发布为不可变 Agent Package（`package_version` + `package_digest`），支持激活与回滚 |
+| 发布 | 版本化发布为不可变 Agent Package，支持激活与回滚 |
 
 **边界**：不直接执行正式 Run，不向草稿暴露生产凭证。
 
@@ -120,10 +119,8 @@ flowchart LR
 **职责**：加载单个 Agent 包，交互接收 Prompt，调用 Qwen Code 与本地 Skill／工具。
 
 - **形态**：目录＋文件＋本地启动入口（`bin/agent.sh` 与纯标准库 CLI `bin/aos_agent.py`），**不依赖三个 Web 中心、平台数据库或消息队列**。
-- **Agent Schema**：`schemas/agent.schema.json`（JSON Schema Draft 2020-12），定义 Agent 包的结构契约。
-- **MCP 适配器**：`adapters/rest_mcp_server.cjs` 把平台 REST 工具适配为标准 stdio MCP 服务。
-- **启动契约**：Prompt 只经 stdin 传入，进程参数用数组不拼 Shell；诊断写 stderr，不污染 JSONL 事件流；退出码遵循规范 6.4。
 - **可移植性**：包内包含定义、项目指令、非敏感配置、工具描述、协议适配器、Skill、测试与版本元数据；**不携带**明文密钥、其他租户数据、模型权重与宿主机沙箱策略。
+- **可扩展性**：支持提供命令行接口，实现能力的扩展与业务的定制。
 
 ---
 
@@ -188,11 +185,33 @@ flowchart TB
 | `approval` | 18081 | 审批代理：在 Hook 内等待并返回明确的允许／拒绝 |
 | `mock` | 18082 | 独立 Mock LLM（OpenAI 兼容，用于无 Qwen/Docker 环境验证） |
 
-执行引擎（`execution_engine`）：
+四个模块的启动方式（所有命令在 `app/` 目录下执行；前三个 Web 中心共用同一后端 `api` 角色，需先启动后端 :8000）：
 
-- **沙箱引擎**（生产路径）：基于 `ghcr.io/qwenlm/qwen-code:0.26.4`，以 `sha256:` digest 锁定；Runner 通过宿主机 Docker socket 启动沙箱，不在容器内运行 Docker daemon。
-- **`dev_host` 引擎**（规范 7.8，仅开发联调）：`AOS_ENV=development` 且 `AOS_DEV_HOST_EXECUTION=true` 时允许宿主直跑 Qwen（Hook 强制、短期令牌经 Gateway、全程标记 `execution_engine=dev_host`），**非沙箱隔离、非验收路径，生产严禁**。
-- **Mock 引擎**：`execution_engine=mock_embedded`，默认预览引擎。
+```bash
+# ── 定义中心 / 运行中心 / 运维中心（三中心 Web 前端）──
+# 开发模式：单一 Vite 开发服务器同时提供三个入口（:3000，/api 代理到 :8000）
+#   运行中心  http://localhost:3000/index.html
+#   定义中心  http://localhost:3000/definition.html
+#   运维中心  http://localhost:3000/ops.html
+npm install && npm run dev
+
+# 生产模式：按中心分别构建静态产物，由 nginx 托管（compose 中为 8081/8082/8083）
+npm run build:definition     # 产物 dist-definition/
+npm run build:runtime        # 产物 dist-runtime/
+npm run build:ops            # 产物 dist-ops/
+
+# ── 独立 Agent 运行后台（package-runtime，无 Web 依赖）──
+# 前提：已通过定义中心发布 Agent Package；在 Agent 包根目录内执行
+bin/agent.sh --version                   # 查看版本
+bin/agent.sh doctor                      # 环境与包完整性自检
+bin/agent.sh run --stdin --output jsonl  # 单轮执行（自动化推荐 --stdin）
+bin/agent.sh chat                        # 交互会话（需要 TTY）
+bin/agent.sh sessions list               # 查看会话
+```
+
+独立后台的模型接入为本地模式：`direct_upstream`（`AOS_MODEL_BASE_URL` + `AOS_MODEL_API_KEY`，非平台治理）或 `managed_gateway`（`AOS_GATEWAY_URL` + `AOS_MODEL_API_KEY`，本地受控凭证）。
+
+执行引擎（`execution_engine`）：
 
 ### 3.3 一次运行的完整链路
 
