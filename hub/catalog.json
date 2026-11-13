@@ -2,7 +2,7 @@
   "repo": "zhenggsh/IksmHub",
   "branch": "master",
   "htmlPreviewPrefix": "https://htmlpreview.github.io/?",
-  "note": "清单按 PR #5（iksm/03-AOS-Project、marp/003-AOS-Project/v1.0.0、output/003-AOS-Project/v1.0.0）合入 master 之后的真实目录编写。001 与 002 的 v1.0.0、v1.1.0 已在 master；003 只有 v1.0.0。PIS 知识文件为 iksm/02-PIS-Project/PIS_intro.md。同一胶片 ID 的 marp 与 output 按版本号对齐。",
+  "note": "清单按 master 上的真实目录编写。001、002、003 的 v1.0.0 与 v1.1.0 已在 master（003 v1.0.0 随 PR #5 合入，003 v1.1.0 随 PR #7 合入）。PIS 知识文件为 iksm/02-PIS-Project/PIS_intro.md。同一胶片 ID 的 marp 与 output 按版本号对齐。",
   "themes": [
     {
       "id": "01",
@@ -68,9 +68,19 @@
         {
           "title": "AOS（Agent Operation System）系统介绍",
           "path": "iksm/03-AOS-Project/AOS_intro.md",
-          "html": "output/003-AOS-Project/v1.0.0/slides.html",
+          "html": "output/003-AOS-Project/v1.1.0/slides.html",
           "deckId": "003",
-          "version": "v1.0.0"
+          "version": "v1.1.0",
+          "exports": [
+            {
+              "version": "v1.0.0",
+              "html": "output/003-AOS-Project/v1.0.0/slides.html"
+            },
+            {
+              "version": "v1.1.0",
+              "html": "output/003-AOS-Project/v1.1.0/slides.html"
+            }
+          ]
         }
       ],
       "files": [
@@ -186,6 +196,27 @@
             "output/003-AOS-Project/v1.0.0/assets/定义中心-模型.png",
             "output/003-AOS-Project/v1.0.0/assets/定义中心-测试.png",
             "output/003-AOS-Project/v1.0.0/assets/运行中心-运行.png"
+          ]
+        },
+        {
+          "version": "v1.1.0",
+          "marp": "marp/003-AOS-Project/v1.1.0/slides.md",
+          "output": "output/003-AOS-Project/v1.1.0/slides.html",
+          "iksmSource": "iksm/03-AOS-Project/AOS_intro.md",
+          "slideCount": 29,
+          "marpAssets": [
+            "marp/003-AOS-Project/v1.1.0/assets/layers.png",
+            "marp/003-AOS-Project/v1.1.0/assets/modules.png",
+            "marp/003-AOS-Project/v1.1.0/assets/run-sequence.png",
+            "marp/003-AOS-Project/v1.1.0/assets/定义中心-测试.png",
+            "marp/003-AOS-Project/v1.1.0/assets/运行中心-运行.png"
+          ],
+          "outputAssets": [
+            "output/003-AOS-Project/v1.1.0/assets/layers.png",
+            "output/003-AOS-Project/v1.1.0/assets/modules.png",
+            "output/003-AOS-Project/v1.1.0/assets/run-sequence.png",
+            "output/003-AOS-Project/v1.1.0/assets/定义中心-测试.png",
+            "output/003-AOS-Project/v1.1.0/assets/运行中心-运行.png"
           ]
         }
       ]
