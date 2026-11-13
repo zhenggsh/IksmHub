@@ -2,7 +2,7 @@
   "repo": "zhenggsh/IksmHub",
   "branch": "master",
   "htmlPreviewPrefix": "https://htmlpreview.github.io/?",
-  "note": "清单按 master 上的真实目录编写。001、002、003 的 v1.0.0 与 v1.1.0 已在 master（003 v1.0.0 随 PR #5 合入，003 v1.1.0 随 PR #7 合入）。PIS 知识文件为 iksm/02-PIS-Project/PIS_intro.md。同一胶片 ID 的 marp 与 output 按版本号对齐。",
+  "note": "清单按 master 上的真实目录编写。001、002、003 的 v1.0.0 与 v1.1.0，以及 004 的 v1.0.0 已在 master（003 v1.0.0 随 PR #5 合入，003 v1.1.0 随 PR #7 合入，004 v1.0.0 随 PR #9 合入）。PIS 知识文件为 iksm/02-PIS-Project/PIS_intro.md。同一胶片 ID 的 marp 与 output 按版本号对齐。",
   "themes": [
     {
       "id": "01",
@@ -88,6 +88,27 @@
         "iksm/03-AOS-Project/files/定义中心-模型.png",
         "iksm/03-AOS-Project/files/定义中心-测试.png",
         "iksm/03-AOS-Project/files/运行中心-运行.png"
+      ]
+    },
+    {
+      "id": "04",
+      "name": "DMP Project",
+      "path": "iksm/04-DMP-Project",
+      "documents": [
+        {
+          "title": "DMP · Dive Model Platform 系统介绍",
+          "path": "iksm/04-DMP-Project/DMP_intro.md",
+          "html": "output/004-DMP-Project/v1.0.0/slides.html",
+          "deckId": "004",
+          "version": "v1.0.0"
+        }
+      ],
+      "files": [
+        "iksm/04-DMP-Project/DMP_intro.md",
+        "iksm/04-DMP-Project/files/invoke_history.png",
+        "iksm/04-DMP-Project/files/model.png",
+        "iksm/04-DMP-Project/files/tool_center.png",
+        "iksm/04-DMP-Project/files/workspace.png"
       ]
     }
   ],
@@ -217,6 +238,33 @@
             "output/003-AOS-Project/v1.1.0/assets/run-sequence.png",
             "output/003-AOS-Project/v1.1.0/assets/定义中心-测试.png",
             "output/003-AOS-Project/v1.1.0/assets/运行中心-运行.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "004",
+      "name": "DMP Project",
+      "marpPath": "marp/004-DMP-Project",
+      "outputPath": "output/004-DMP-Project",
+      "versions": [
+        {
+          "version": "v1.0.0",
+          "marp": "marp/004-DMP-Project/v1.0.0/slides.md",
+          "output": "output/004-DMP-Project/v1.0.0/slides.html",
+          "iksmSource": "iksm/04-DMP-Project/DMP_intro.md",
+          "slideCount": 27,
+          "marpAssets": [
+            "marp/004-DMP-Project/v1.0.0/assets/invoke_history.png",
+            "marp/004-DMP-Project/v1.0.0/assets/model.png",
+            "marp/004-DMP-Project/v1.0.0/assets/tool_center.png",
+            "marp/004-DMP-Project/v1.0.0/assets/workspace.png"
+          ],
+          "outputAssets": [
+            "output/004-DMP-Project/v1.0.0/assets/invoke_history.png",
+            "output/004-DMP-Project/v1.0.0/assets/model.png",
+            "output/004-DMP-Project/v1.0.0/assets/tool_center.png",
+            "output/004-DMP-Project/v1.0.0/assets/workspace.png"
           ]
         }
       ]
