@@ -1,0 +1,186 @@
+{
+  "note": "书架配置是「哪本书出现在哪一层」的唯一来源。首页 hub/home.js 只读本文件摆书，不在脚本里写死映射。在册书是否出现、书名、版本，以及页脚统计，仍只来自 hub/catalog.json：kind 为 theme 或 documents 的书，只有清单里真有对应主题才显示为在册，找不到就不显示，也不会编造条目。kind 为 placeholder 的书是预留位，不代表已有知识。调整所属书架或增删预留书时只改本文件。不要在这里写页脚数字。",
+  "catalogPage": "sub-catalog.html",
+  "shelves": [
+    {
+      "id": "E",
+      "title": "应用项目",
+      "summary": "将知识应用于实际项目",
+      "legend": "学以致用 · 创造价值",
+      "tone": "violet",
+      "status": "live",
+      "addLabel": "添加新项目",
+      "addAction": "add-project",
+      "moreLabel": "更多项目",
+      "moreHref": "sub-catalog.html#shelf=E",
+      "books": [
+        {
+          "kind": "theme",
+          "themeId": "04",
+          "code": "DMP",
+          "en": "Dive Model Platform",
+          "glyph": "cube"
+        },
+        {
+          "kind": "theme",
+          "themeId": "03",
+          "code": "AOS",
+          "en": "Agent OS",
+          "glyph": "radar"
+        },
+        {
+          "kind": "theme",
+          "themeId": "05",
+          "code": "OAP",
+          "en": "Ontology AI Platform",
+          "glyph": "nodes"
+        },
+        {
+          "kind": "theme",
+          "themeId": "02",
+          "code": "PIS",
+          "en": "Project InSight",
+          "glyph": "insight"
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "title": "工作方法",
+      "summary": "提升效率与解决问题的能力",
+      "legend": "提升效率 · 放大认知",
+      "tone": "blue",
+      "status": "live",
+      "addLabel": "添加新方法",
+      "addAction": "add-method",
+      "moreLabel": "更多方法",
+      "moreHref": "sub-catalog.html#shelf=D",
+      "books": [
+        {
+          "kind": "documents",
+          "themeId": "01",
+          "glyph": "method",
+          "note": "主题 01「工作方法」的在册文档。当前就是工作方法论，显示名和版本取自 catalog.json。"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "title": "业务知识",
+      "summary": "理解业务场景与行业知识",
+      "legend": "理解场景 · 解决问题",
+      "tone": "cyan",
+      "status": "reserved",
+      "addLabel": "添加新业务",
+      "addAction": "add-business",
+      "moreLabel": "更多业务",
+      "moreHref": "sub-catalog.html#themes",
+      "books": [
+        {
+          "kind": "placeholder",
+          "title": "通信网络",
+          "en": "Communication Network",
+          "glyph": "wifi",
+          "index": "1"
+        },
+        {
+          "kind": "placeholder",
+          "title": "客户关系",
+          "en": "Customer Relationship",
+          "glyph": "people",
+          "index": "2"
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "title": "数学知识",
+      "summary": "逻辑思维与解决问题的基础",
+      "legend": "逻辑基础 · 抽象思维",
+      "tone": "gold",
+      "status": "reserved",
+      "addLabel": "添加新知识",
+      "addAction": "add-math",
+      "moreLabel": "更多数学",
+      "moreHref": "sub-catalog.html#themes",
+      "books": [
+        {
+          "kind": "placeholder",
+          "title": "几何",
+          "en": "Geometry",
+          "glyph": "triangle"
+        },
+        {
+          "kind": "placeholder",
+          "title": "微积分",
+          "en": "Calculus",
+          "glyph": "integral"
+        },
+        {
+          "kind": "placeholder",
+          "title": "集合",
+          "en": "Set Theory",
+          "glyph": "venn"
+        },
+        {
+          "kind": "placeholder",
+          "title": "线性代数",
+          "en": "Linear Algebra",
+          "glyph": "matrix"
+        },
+        {
+          "kind": "placeholder",
+          "title": "概率统计",
+          "en": "Probability",
+          "glyph": "curve"
+        }
+      ]
+    },
+    {
+      "id": "A",
+      "title": "编程能力",
+      "summary": "从基础到进阶的编程体系",
+      "legend": "动手实践 · 构建基础",
+      "tone": "navy",
+      "status": "reserved",
+      "addLabel": "添加新技能",
+      "addAction": "add-skill",
+      "moreLabel": "更多技能",
+      "moreHref": "sub-catalog.html#themes",
+      "books": [
+        {
+          "kind": "placeholder",
+          "title": "基础式编程",
+          "en": "基础语法 · 算法 · 数学",
+          "glyph": "braces",
+          "index": "1",
+          "wide": true
+        },
+        {
+          "kind": "placeholder",
+          "title": "架构式编程",
+          "en": "架构模式 · 框架 · 中间件",
+          "glyph": "layers",
+          "index": "2",
+          "wide": true
+        },
+        {
+          "kind": "placeholder",
+          "title": "自动化编程",
+          "en": "工具链 · 模型 · 自动化",
+          "glyph": "bot",
+          "index": "3",
+          "wide": true
+        },
+        {
+          "kind": "placeholder",
+          "title": "终端类编程",
+          "en": "命令行 · 环境 · 工具",
+          "glyph": "terminal",
+          "index": "4",
+          "wide": true
+        }
+      ]
+    }
+  ]
+}

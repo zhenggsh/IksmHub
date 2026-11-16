@@ -26,11 +26,14 @@
 
   const state = {
     catalog: null,
+    shelfConfig: null,
     category: "themes",
     query: "",
     theme: "",
+    shelf: "",
     view: null,
     applying: false,
+    focusPending: false,
   };
 
   startStarfield();
@@ -68,9 +71,19 @@
   async function bootApp() {
     const started = performance.now();
     try {
-      const response = await fetch("hub/catalog.json", { cache: "no-cache" });
+      const [response, shelfResponse] = await Promise.all([
+        fetch("hub/catalog.json", { cache: "no-cache" }),
+        fetch("hub/shelf-config.json", { cache: "no-cache" }),
+      ]);
       if (!response.ok) throw new Error("清单请求失败（" + response.status + "）");
       state.catalog = await response.json();
+      if (shelfResponse.ok) {
+        try {
+          state.shelfConfig = await shelfResponse.json();
+        } catch (error) {
+          state.shelfConfig = null;
+        }
+      }
       renderStats();
       const wait = reduced ? 0 : Math.max(0, 680 - (performance.now() - started));
       window.setTimeout(() => {
@@ -114,10 +127,39 @@
     renderDecks();
   }
 
+  function themesForView() {
+    const themes = state.catalog.themes.slice();
+    if (state.theme) return themes.filter((theme) => theme.id === state.theme);
+    if (!state.shelf) return themes;
+    const ids = themeIdsOnShelf(state.shelf);
+    if (ids === null) return themes;
+    return themes
+      .filter((theme) => ids.indexOf(theme.id) !== -1)
+      .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+  }
+
+  function themeIdsOnShelf(shelfId) {
+    const shelves = state.shelfConfig && state.shelfConfig.shelves;
+    if (!Array.isArray(shelves)) return null;
+    const shelf = shelves.find((item) => item && item.id === shelfId);
+    if (!shelf) return [];
+    const ids = [];
+    (Array.isArray(shelf.books) ? shelf.books : []).forEach((book) => {
+      if (!book || book.kind === "placeholder" || !book.themeId) return;
+      if (ids.indexOf(book.themeId) === -1) ids.push(book.themeId);
+    });
+    return ids;
+  }
+
+  function shelfMeta(shelfId) {
+    const shelves = state.shelfConfig && state.shelfConfig.shelves;
+    if (!Array.isArray(shelves)) return null;
+    return shelves.find((item) => item && item.id === shelfId) || null;
+  }
+
   function renderThemes() {
     const cards = [];
-    state.catalog.themes.forEach((theme, index) => {
-      if (state.theme && theme.id !== state.theme) return;
+    themesForView().forEach((theme, index) => {
       const bits = [theme.name, theme.path];
       theme.documents.forEach((doc) => {
         bits.push(doc.title, doc.path);
@@ -161,27 +203,48 @@
       card.append(fileDisclosure("目录中的文件", theme.files));
       cards.push(card);
     });
-    fillPanel(
-      panels.themes,
-      cards,
-      state.theme ? "这个主题下没有匹配的条目。" : "没有匹配的知识主题。"
-    );
+    const emptyText = state.theme
+      ? "这个主题下没有匹配的条目。"
+      : state.shelf
+        ? "书架 " + state.shelf + " 还没有收录到目录中的知识主题。"
+        : "没有匹配的知识主题。";
+    fillPanel(panels.themes, cards, emptyText);
     renderThemeBanner();
+    if (state.focusPending) {
+      state.focusPending = false;
+      focusListedCard();
+    }
   }
 
   function renderThemeBanner() {
     const banner = document.querySelector("#theme-banner");
     if (!banner || !state.catalog) return;
-    if (!state.theme) {
+    if (!state.theme && !state.shelf) {
       banner.hidden = true;
       banner.replaceChildren();
+      document.title = "目录浏览 · IKSM HUB";
       return;
     }
-    const theme = state.catalog.themes.find((item) => item.id === state.theme);
     const text = document.createElement("p");
-    text.textContent = theme
-      ? "当前只显示主题 " + theme.id + " · " + theme.name + "。可以在这里打开 Markdown 与导出 HTML。"
-      : "目录中没有编号为 " + state.theme + " 的主题。";
+    if (state.theme) {
+      const theme = state.catalog.themes.find((item) => item.id === state.theme);
+      text.textContent = theme
+        ? "当前只显示主题 " + theme.id + " · " + theme.name + "。可以在这里打开 Markdown 与导出 HTML。"
+        : "目录中没有编号为 " + state.theme + " 的主题。";
+      document.title = (theme ? theme.name + " · " : "") + "目录浏览 · IKSM HUB";
+    } else {
+      const meta = shelfMeta(state.shelf);
+      const ids = themeIdsOnShelf(state.shelf);
+      const title = meta && meta.title ? " · " + meta.title : "";
+      if (ids === null) {
+        text.textContent = "书架配置没有载入，因此仍显示全部已收录主题。";
+      } else if (!ids.length) {
+        text.textContent = "书架 " + state.shelf + title + " 还没有已收录的知识主题。这里不会编造条目。";
+      } else {
+        text.textContent = "当前只显示书架 " + state.shelf + title + " 中已收录的主题。可以打开 Markdown 与导出 HTML。";
+      }
+      document.title = "书架 " + state.shelf + " · 目录浏览 · IKSM HUB";
+    }
     const all = document.createElement("a");
     all.href = "#themes";
     all.textContent = "查看全部主题";
@@ -270,6 +333,22 @@
     panel.classList.add("panel-in");
   }
 
+  function focusListedCard() {
+    const card = state.theme ? panels.themes.querySelector(".card.is-focus") : null;
+    const banner = document.querySelector("#theme-banner");
+    const target = card || (state.shelf && banner && !banner.hidden ? banner : null);
+    if (!target) return;
+    if (card) {
+      if (!card.id) card.id = "theme-card-" + state.theme;
+      card.tabIndex = -1;
+      card.focus({ preventScroll: true });
+    }
+    const behavior = reduced ? "auto" : "smooth";
+    window.requestAnimationFrame(() => {
+      target.scrollIntoView({ block: "center", behavior: behavior });
+    });
+  }
+
   function showCategory(category) {
     state.category = category === "decks" ? "decks" : "themes";
     for (const key of Object.keys(panels)) {
@@ -296,6 +375,7 @@
     try {
       if (raw.startsWith("md=") || raw.startsWith("html=")) {
         state.theme = "";
+        state.shelf = "";
         renderThemeBanner();
         const kind = raw.startsWith("md=") ? "md" : "html";
         const path = raw.slice(kind.length + 1);
@@ -307,17 +387,37 @@
         const value = raw.slice("theme=".length).split("&")[0];
         if (!/^[0-9A-Za-z_-]{1,32}$/.test(value)) {
           state.theme = "";
+          state.shelf = "";
           history.replaceState(null, "", "#themes");
           showCategory("themes");
           return;
         }
         state.theme = value;
+        state.shelf = "";
         state.query = "";
         queryInput.value = "";
+        state.focusPending = true;
+        showCategory("themes");
+        return;
+      }
+      if (raw.startsWith("shelf=")) {
+        const value = raw.slice("shelf=".length).split("&")[0].toUpperCase();
+        state.theme = "";
+        if (!/^[A-E]$/.test(value)) {
+          state.shelf = "";
+          history.replaceState(null, "", "#themes");
+          showCategory("themes");
+          return;
+        }
+        state.shelf = value;
+        state.query = "";
+        queryInput.value = "";
+        state.focusPending = true;
         showCategory("themes");
         return;
       }
       state.theme = "";
+      state.shelf = "";
       showCategory(raw === "decks" ? "decks" : "themes");
     } finally {
       state.applying = false;

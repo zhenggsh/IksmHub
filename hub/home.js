@@ -1,23 +1,14 @@
 /* Bookshelf homepage.
-   Real titles and counts come from hub/catalog.json. Theme 01 documents
-   fill shelf D; every other theme is an application project on shelf E.
-   Known covers: 04 DMP, 03 AOS, 05 OAP, 02 PIS. Shelves A–C are reserved
-   slots in the HTML, not catalog entries. No catalog.json field was added:
-   the shelf each theme belongs to is fixed by this page's information architecture. */
+   Which book sits on which shelf comes only from hub/shelf-config.json.
+   A theme or document is shown as 在册 only when hub/catalog.json actually
+   contains it. Placeholder books are reserved slots from the same config.
+   Footer counts are computed from catalog.json alone. */
 (() => {
-  const PROJECT_ORDER = ["04", "03", "05", "02"];
-  const FACES = {
-    "02": { code: "PIS", en: "Project InSight", glyph: "insight" },
-    "03": { code: "AOS", en: "Agent OS", glyph: "radar" },
-    "04": { code: "DMP", en: "Dive Model Platform", glyph: "cube" },
-    "05": { code: "OAP", en: "Ontology AI Platform", glyph: "nodes" },
-  };
-
   const queryInput = document.querySelector("#q");
   const searchStatus = document.querySelector("#search-status");
-  const booksE = document.querySelector("#books-E");
-  const booksD = document.querySelector("#books-D");
-  if (!queryInput || !booksE || !booksD) return;
+  if (!queryInput) return;
+
+  let shelfConfig = null;
 
   queryInput.addEventListener("input", () => filterBooks(queryInput.value));
   queryInput.addEventListener("keydown", (event) => {
@@ -27,76 +18,194 @@
     }
   });
 
-  async function loadCatalog() {
+  async function load() {
+    const shelfOutcome = await loadJson("hub/shelf-config.json");
+    const catalogOutcome = await loadJson("hub/catalog.json");
+    if (!shelfOutcome.data || !Array.isArray(shelfOutcome.data.shelves)) {
+      const message = fileHint(shelfOutcome.error, "书架配置没有载入，书目无法按层显示。");
+      document.querySelectorAll(".books").forEach((container) => showMountError(container, message));
+      return;
+    }
+    shelfConfig = shelfOutcome.data;
+    const catalog = catalogOutcome.data && Array.isArray(catalogOutcome.data.themes)
+      ? catalogOutcome.data
+      : null;
+    shelfConfig.shelves.forEach((shelf) => {
+      if (!shelf || !shelf.id) return;
+      applyChrome(shelf);
+      const container = document.querySelector("#books-" + shelf.id);
+      if (!container) return;
+      const built = specsForShelf(shelf, catalog);
+      if (!built.specs.length && built.blocked) {
+        showMountError(container, fileHint(catalogOutcome.error, "目录清单没有载入，已收录的书无法显示。"));
+        return;
+      }
+      mountBooks(container, built.specs);
+    });
+    if (catalog) renderMetrics(catalog);
+    filterBooks(queryInput.value);
+  }
+
+  async function loadJson(url) {
     try {
-      const response = await fetch("hub/catalog.json", { cache: "no-cache" });
-      if (!response.ok) throw new Error("清单请求失败（" + response.status + "）");
-      const catalog = await response.json();
-      if (!catalog || !Array.isArray(catalog.themes)) throw new Error("清单格式无法识别");
-      mountBooks(booksE, projectThemes(catalog).map(projectSpec));
-      mountBooks(booksD, methodSpecs(catalog));
-      renderMetrics(catalog);
-      filterBooks(queryInput.value);
+      const response = await fetch(url, { cache: "no-cache" });
+      if (!response.ok) throw new Error(url + " 请求失败（" + response.status + "）");
+      const data = await response.json();
+      if (!data || typeof data !== "object") throw new Error(url + " 格式无法识别");
+      return { data: data, error: null };
     } catch (error) {
-      const local = location.protocol === "file:";
-      const message = local
-        ? "当前是本地文件打开，浏览器会拦截读取目录。请在仓库根目录执行 python3 -m http.server，再用提示的地址访问。"
-        : "目录清单没有载入，已有项目和方法无法显示。";
-      showMountError(booksE, message);
-      showMountError(booksD, message);
+      return { data: null, error: error };
     }
   }
 
-  function projectThemes(catalog) {
-    return catalog.themes.filter((theme) => theme && theme.id && theme.id !== "01").slice().sort((a, b) => {
-      const ra = PROJECT_ORDER.indexOf(a.id);
-      const rb = PROJECT_ORDER.indexOf(b.id);
-      const oa = ra === -1 ? 99 : ra;
-      const ob = rb === -1 ? 99 : rb;
-      if (oa !== ob) return oa - ob;
-      return String(a.id).localeCompare(String(b.id));
-    });
+  function fileHint(error, fallback) {
+    if (location.protocol === "file:") {
+      return "当前是本地文件打开，浏览器会拦截读取目录。请在仓库根目录执行 python3 -m http.server，再用提示的地址访问。";
+    }
+    return fallback;
   }
 
-  function projectSpec(theme) {
-    const face = FACES[theme.id] || {
-      code: fallbackCode(theme),
-      en: theme.name || theme.id,
-      glyph: "cube",
+  function specsForShelf(shelf, catalog) {
+    const specs = [];
+    let blocked = false;
+    asList(shelf.books).forEach((book) => {
+      if (!book || !book.kind) return;
+      if (book.kind === "placeholder") {
+        specs.push(placeholderSpec(shelf, book));
+        return;
+      }
+      if (book.kind !== "theme" && book.kind !== "documents") return;
+      if (!catalog) {
+        blocked = true;
+        return;
+      }
+      const theme = findTheme(catalog, book.themeId);
+      if (!theme) return;
+      if (book.kind === "documents") {
+        asList(theme.documents).filter((doc) => doc && (doc.title || doc.path)).forEach((doc, index) => {
+          specs.push(documentSpec(shelf, book, theme, doc, index));
+        });
+        return;
+      }
+      specs.push(themeSpec(shelf, book, theme));
+    });
+    return { specs: specs, blocked: blocked };
+  }
+
+  function placeholderSpec(shelf, book) {
+    const title = String(book.title || "预留");
+    const params = new URLSearchParams();
+    params.set("shelf", shelf.id);
+    params.set("item", title.slice(0, 40));
+    return {
+      reserved: true,
+      wide: Boolean(book.wide),
+      href: "placeholder.html?" + params.toString(),
+      search: [title, book.en, shelf.id, shelf.title, "预留"].filter(Boolean).join(" "),
+      label: title + "，预留，内容待建设",
+      idx: book.index ? String(book.index) : "",
+      title: title,
+      code: false,
+      en: book.en || "",
+      glyph: book.glyph || "cube",
     };
-    const docs = asList(theme.documents);
-    const bits = ["应用项目", "E", theme.id, theme.name, theme.path, face.code, face.en];
-    docs.forEach((doc) => {
+  }
+
+  function themeSpec(shelf, book, theme) {
+    const code = book.code || fallbackCode(theme);
+    const en = book.en || theme.name || "";
+    const bits = [shelf.title, shelf.id, theme.id, theme.name, theme.path, code, en, "在册"];
+    asList(theme.documents).forEach((doc) => {
       if (!doc) return;
       bits.push(doc.title, doc.path, doc.version, doc.deckId);
     });
     return {
-      real: true,
-      href: "catalog.html#theme=" + encodeURIComponent(theme.id),
-      search: bits.join(" "),
-      label: face.code + "，" + face.en + "，打开目录中的主题 " + theme.id + " " + (theme.name || ""),
-      title: face.code,
-      en: face.en,
-      glyph: face.glyph,
+      reserved: false,
+      wide: Boolean(book.wide),
+      href: themeHref(theme.id),
+      search: bits.filter(Boolean).join(" "),
+      label: code + "，" + en + "，打开目录中的主题 " + theme.id + " " + (theme.name || ""),
+      idx: "",
+      title: code,
+      code: true,
+      en: en,
+      glyph: book.glyph || "cube",
+      themeId: theme.id,
     };
   }
 
-  function methodSpecs(catalog) {
-    const theme = catalog.themes.find((item) => item && item.id === "01");
-    if (!theme) return [];
-    return asList(theme.documents).filter((doc) => doc && (doc.title || doc.path)).map((doc, index) => {
-      const version = doc.version ? " · " + doc.version : "";
-      return {
-        real: true,
-        href: "catalog.html#theme=" + encodeURIComponent(theme.id),
-        search: ["工作方法", "D", theme.id, theme.name, doc.title, doc.path, doc.version, doc.deckId].join(" "),
-        label: (doc.title || "未命名文档") + "，打开目录中的主题 " + theme.id + " " + (theme.name || ""),
-        idx: String(index + 1),
-        title: doc.title || "未命名文档",
-        en: (theme.name || "工作方法") + version,
-        glyph: "method",
-      };
-    });
+  function documentSpec(shelf, book, theme, doc, index) {
+    const version = doc.version ? " · " + doc.version : "";
+    return {
+      reserved: false,
+      wide: Boolean(book.wide),
+      href: themeHref(theme.id),
+      search: [shelf.title, shelf.id, theme.id, theme.name, doc.title, doc.path, doc.version, doc.deckId, "在册"].filter(Boolean).join(" "),
+      label: (doc.title || "未命名文档") + "，打开目录中的主题 " + theme.id + " " + (theme.name || ""),
+      idx: String(index + 1),
+      title: doc.title || "未命名文档",
+      code: false,
+      en: (theme.name || shelf.title || "") + version,
+      glyph: book.glyph || "method",
+      themeId: theme.id,
+    };
+  }
+
+  function themeHref(themeId) {
+    return catalogPage() + "#theme=" + encodeURIComponent(themeId);
+  }
+
+  function catalogPage() {
+    const name = shelfConfig && shelfConfig.catalogPage;
+    if (typeof name === "string" && /^[A-Za-z0-9.-]+\.html$/.test(name)) return name;
+    return "sub-catalog.html";
+  }
+
+  function findTheme(catalog, themeId) {
+    if (!safeThemeId(themeId)) return null;
+    return asList(catalog.themes).find((theme) => theme && theme.id === themeId) || null;
+  }
+
+  function safeThemeId(themeId) {
+    return typeof themeId === "string" && /^[0-9A-Za-z_-]{1,32}$/.test(themeId);
+  }
+
+  function applyChrome(shelf) {
+    const section = document.getElementById("shelf-" + shelf.id);
+    if (section) {
+      if (shelf.tone) section.dataset.tone = shelf.tone;
+      const heading = section.querySelector(".label-copy h2");
+      const summary = section.querySelector(".label-copy p");
+      if (heading && shelf.title) heading.textContent = shelf.title;
+      if (summary && shelf.summary) summary.textContent = shelf.summary;
+      const add = section.querySelector(".add-card");
+      if (add) {
+        if (typeof shelf.addAction === "string" && /^[a-z0-9-]{1,40}$/.test(shelf.addAction)) {
+          add.href = "placeholder.html?action=" + shelf.addAction;
+        }
+        const label = add.querySelector(".add-label");
+        if (label && shelf.addLabel) label.textContent = shelf.addLabel;
+      }
+      const more = section.querySelector("a.holo");
+      if (more && typeof shelf.moreHref === "string" && /^(sub-catalog|placeholder)\.html([?#][^\s]*)?$/.test(shelf.moreHref)) {
+        more.href = shelf.moreHref;
+        const text = more.querySelector(".more");
+        if (text && shelf.moreLabel) text.textContent = shelf.moreLabel + " →";
+        if (shelf.moreLabel) more.setAttribute("aria-label", shelf.moreLabel + "，打开目录浏览");
+      }
+    }
+    const legendLink = document.querySelector('.legend a[href="#shelf-' + shelf.id + '"]');
+    if (!legendLink) return;
+    const strong = legendLink.querySelector("strong");
+    const small = legendLink.querySelector("small");
+    const badge = legendLink.querySelector("em");
+    if (strong && shelf.title) strong.textContent = shelf.title;
+    if (small && shelf.legend) small.textContent = shelf.legend;
+    if (badge) badge.textContent = shelf.status === "live" ? "在册" : "预留";
+    const item = legendLink.closest("li");
+    if (!item) return;
+    if (shelf.status === "reserved") item.setAttribute("data-reserve", "");
+    else item.removeAttribute("data-reserve");
   }
 
   function mountBooks(container, specs) {
@@ -132,14 +241,17 @@
 
   function renderBook(spec) {
     const link = document.createElement("a");
-    link.className = "book is-real";
+    link.className = "book " + (spec.reserved ? "is-reserved" : "is-real");
+    if (spec.wide) link.classList.add("is-wide");
     link.href = spec.href;
     link.dataset.search = spec.search;
+    if (spec.themeId) link.dataset.theme = spec.themeId;
     link.setAttribute("aria-label", spec.label);
     const box = document.createElement("span");
     box.className = "book-3d";
     box.append(layer("pages"), layer("spine"), cover(spec));
     link.append(box);
+    decorateGlyphs(link);
     return link;
   }
 
@@ -147,8 +259,8 @@
     const node = document.createElement("span");
     node.className = "cover";
     const flag = document.createElement("span");
-    flag.className = "flag flag-live";
-    flag.textContent = "在册";
+    flag.className = spec.reserved ? "flag flag-reserve" : "flag flag-live";
+    flag.textContent = spec.reserved ? "预留" : "在册";
     node.append(flag);
     if (spec.idx) {
       const idx = document.createElement("span");
@@ -157,12 +269,11 @@
       node.append(idx);
     }
     const title = document.createElement("span");
-    title.className = spec.idx ? "ttl" : "ttl ttl-code";
+    title.className = spec.code ? "ttl ttl-code" : "ttl";
     title.textContent = spec.title;
     const glyph = document.createElement("span");
     glyph.className = "glyph";
-    glyph.dataset.glyph = spec.glyph;
-    glyph.innerHTML = ICONS[spec.glyph] || ICONS.cube;
+    glyph.dataset.glyph = spec.glyph || "cube";
     const en = document.createElement("span");
     en.className = "en";
     en.textContent = spec.en || "";
@@ -229,7 +340,7 @@
   function decorateGlyphs(root) {
     root.querySelectorAll("[data-glyph]").forEach((node) => {
       if (node.childElementCount) return;
-      node.innerHTML = ICONS[node.dataset.glyph] || "";
+      node.innerHTML = ICONS[node.dataset.glyph] || ICONS.cube || "";
     });
   }
 
@@ -238,10 +349,10 @@
   }
 
   function fallbackCode(theme) {
-    const name = String(theme.name || theme.id || "项目");
+    const name = String((theme && (theme.name || theme.id)) || "项目");
     const token = name.split(/\s+/)[0];
     if (token && token.length <= 10) return token;
-    return String(theme.id || "项目");
+    return String((theme && theme.id) || "项目");
   }
 
   function icon(body) {
@@ -277,8 +388,9 @@
     curve: icon('<path d="M6 36c6-2 8-16 18-18 10 2 12 16 18 18"/><path d="M8 40h32"/>'),
     braces: icon('<path d="M20 10c-6 0-7 5-7 8s3 4-1 6 1 4 1 6 1 8 7 8"/><path d="M28 10c6 0 7 5 7 8s-3 4 1 6-1 4-1 6-1 8-7 8"/>'),
     bot: icon('<rect x="12" y="16" width="24" height="18" rx="3"/><path d="M24 16V9"/><circle cx="24" cy="8" r="2"/><circle cx="19" cy="24" r="1.6" fill="currentColor" stroke="none"/><circle cx="29" cy="24" r="1.6" fill="currentColor" stroke="none"/><path d="M18 34v4M30 34v4"/>'),
+    terminal: icon('<rect x="8" y="10" width="32" height="24" rx="3"/><path d="M14 18l6 4-6 4M24 26h10"/>'),
   };
 
   decorateGlyphs(document);
-  loadCatalog();
+  load();
 })();
