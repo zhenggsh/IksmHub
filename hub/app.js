@@ -28,6 +28,7 @@
     catalog: null,
     category: "themes",
     query: "",
+    theme: "",
     view: null,
     applying: false,
   };
@@ -54,7 +55,11 @@
     if (state.applying) return;
     const hash = location.hash;
     if (hash.startsWith("#md=") || hash.startsWith("#html=")) {
-      history.pushState(null, "", state.category === "decks" ? "#decks" : "#themes");
+      const next = state.theme
+        ? "#theme=" + encodeURIComponent(state.theme)
+        : (state.category === "decks" ? "#decks" : "#themes");
+      history.pushState(null, "", next);
+      applyHash();
     }
   });
   window.addEventListener("popstate", applyHash);
@@ -112,6 +117,7 @@
   function renderThemes() {
     const cards = [];
     state.catalog.themes.forEach((theme, index) => {
+      if (state.theme && theme.id !== state.theme) return;
       const bits = [theme.name, theme.path];
       theme.documents.forEach((doc) => {
         bits.push(doc.title, doc.path);
@@ -119,7 +125,11 @@
       });
       const blob = bits.join(" ").toLowerCase();
       if (state.query && !blob.includes(state.query)) return;
-      const card = el("article", { class: "card", style: "--d:" + index });
+      const card = el("article", {
+        class: "card" + (state.theme === theme.id ? " is-focus" : ""),
+        style: "--d:" + index,
+        "data-theme": theme.id,
+      });
       card.append(
         el("div", { class: "card-mark" }, theme.id),
         el("p", { class: "badge" }, "IKSM · 知识主题"),
@@ -151,7 +161,35 @@
       card.append(fileDisclosure("目录中的文件", theme.files));
       cards.push(card);
     });
-    fillPanel(panels.themes, cards, "没有匹配的知识主题。");
+    fillPanel(
+      panels.themes,
+      cards,
+      state.theme ? "这个主题下没有匹配的条目。" : "没有匹配的知识主题。"
+    );
+    renderThemeBanner();
+  }
+
+  function renderThemeBanner() {
+    const banner = document.querySelector("#theme-banner");
+    if (!banner || !state.catalog) return;
+    if (!state.theme) {
+      banner.hidden = true;
+      banner.replaceChildren();
+      return;
+    }
+    const theme = state.catalog.themes.find((item) => item.id === state.theme);
+    const text = document.createElement("p");
+    text.textContent = theme
+      ? "当前只显示主题 " + theme.id + " · " + theme.name + "。可以在这里打开 Markdown 与导出 HTML。"
+      : "目录中没有编号为 " + state.theme + " 的主题。";
+    const all = document.createElement("a");
+    all.href = "#themes";
+    all.textContent = "查看全部主题";
+    const home = document.createElement("a");
+    home.href = "index.html";
+    home.textContent = "返回知识总览";
+    banner.replaceChildren(text, all, home);
+    banner.hidden = false;
   }
 
   function htmlExports(doc) {
@@ -257,12 +295,29 @@
     const raw = decodeURIComponent(location.hash.replace(/^#/, ""));
     try {
       if (raw.startsWith("md=") || raw.startsWith("html=")) {
+        state.theme = "";
+        renderThemeBanner();
         const kind = raw.startsWith("md=") ? "md" : "html";
         const path = raw.slice(kind.length + 1);
         openPath(kind, path, { fromHash: true });
         return;
       }
       if (viewer.open) viewer.close();
+      if (raw.startsWith("theme=")) {
+        const value = raw.slice("theme=".length).split("&")[0];
+        if (!/^[0-9A-Za-z_-]{1,32}$/.test(value)) {
+          state.theme = "";
+          history.replaceState(null, "", "#themes");
+          showCategory("themes");
+          return;
+        }
+        state.theme = value;
+        state.query = "";
+        queryInput.value = "";
+        showCategory("themes");
+        return;
+      }
+      state.theme = "";
       showCategory(raw === "decks" ? "decks" : "themes");
     } finally {
       state.applying = false;

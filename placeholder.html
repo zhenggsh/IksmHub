@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>内容待建设 · IKSM HUB</title>
+  <meta name="description" content="IKSM HUB 预留页。这里还没有内容，也不会保存数据。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23031833'/%3E%3Cpath d='M8 22 L16 7 L24 22' fill='none' stroke='%237ee7ff' stroke-width='2.4'/%3E%3Ccircle cx='16' cy='18' r='2.2' fill='%233d8bff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hub/home.css">
+</head>
+<body class="gate-body">
+  <div class="bg" aria-hidden="true"></div>
+  <main class="gate">
+    <p class="gate-kicker" id="kicker">预留</p>
+    <h1 id="heading">内容待建设</h1>
+    <p class="gate-lead" id="lead">这一页是预留位置。这里没有文章，也不会保存数据。</p>
+    <p class="gate-brand">IKSM HUB</p>
+    <p class="slogan">输出才通透，共享才拥有</p>
+    <div class="gate-actions">
+      <a class="gate-primary" href="index.html">返回知识总览</a>
+      <a class="gate-secondary" href="catalog.html">打开目录浏览</a>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var nav = {
+        graph: "知识图谱",
+        path: "学习路径",
+        practice: "项目实践",
+        notes: "笔记收藏",
+        tags: "标签管理",
+        settings: "系统设置"
+      };
+      var actions = {
+        add: ["添加知识", "此入口为预留，不会写入或保存任何内容。"],
+        "add-project": ["添加新项目", "此入口为预留，不会写入或保存任何内容。"],
+        "add-method": ["添加新方法", "此入口为预留，不会写入或保存任何内容。"],
+        "add-business": ["添加新业务", "此入口为预留，不会写入或保存任何内容。"],
+        "add-math": ["添加新知识", "此入口为预留，不会写入或保存任何内容。"],
+        "add-skill": ["添加新技能", "此入口为预留，不会写入或保存任何内容。"],
+        "more-project": ["更多项目", "此入口为预留。目录里现有的项目已经放在书架上，这里不会加载额外数据。"],
+        "more-method": ["更多方法", "此入口为预留。目录里现有的方法已经放在书架上，这里不会加载额外数据。"],
+        "more-business": ["更多业务", "此入口为预留，不会加载额外数据。"],
+        "more-math": ["更多数学", "此入口为预留，不会加载额外数据。"],
+        "more-skill": ["更多技能", "此入口为预留，不会加载额外数据。"]
+      };
+      var kicker = document.getElementById("kicker");
+      var heading = document.getElementById("heading");
+      var lead = document.getElementById("lead");
+      var navKey = params.get("nav");
+      var actionKey = params.get("action");
+      var shelf = params.get("shelf") || "";
+      var item = params.get("item") || "";
+      if (navKey && nav[navKey]) {
+        kicker.textContent = "知识导航 · 预留";
+        heading.textContent = nav[navKey];
+        lead.textContent = "内容待建设。这个分区还没有设计，也没有可展示的内容。";
+        document.title = nav[navKey] + " · 内容待建设 · IKSM HUB";
+        return;
+      }
+      if (actionKey && actions[actionKey]) {
+        kicker.textContent = "预留操作";
+        heading.textContent = actions[actionKey][0];
+        lead.textContent = actions[actionKey][1];
+        document.title = actions[actionKey][0] + " · 预留 · IKSM HUB";
+        return;
+      }
+      if (/^[A-E]$/.test(shelf)) {
+        var name = item.replace(/\s+/g, " ").trim().slice(0, 40);
+        kicker.textContent = "书架 " + shelf + " · 预留";
+        heading.textContent = name || ("书架 " + shelf);
+        lead.textContent = "内容待建设。IksmHub 目录里还没有这一层的知识，因此这里没有文章，也不会跳到不存在的内容。";
+        document.title = (name || "预留") + " · 内容待建设 · IKSM HUB";
+      }
+    })();
+  </script>
+</body>
+</html>
