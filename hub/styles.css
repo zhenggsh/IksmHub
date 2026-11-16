@@ -350,6 +350,41 @@ summary { cursor: pointer; color: var(--muted); }
   font-family: var(--mono);
   color: #d7f3ff;
 }
+.colophon a { color: var(--cyan); }
+.home-link {
+  color: #041428;
+  background: linear-gradient(90deg, #8aebff, #4d90ff);
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-right: 4px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.theme-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(126, 231, 255, 0.4);
+  background: rgba(8, 32, 72, 0.72);
+}
+.theme-banner p { margin: 0; flex: 1 1 260px; }
+.theme-banner a {
+  color: #041428;
+  background: linear-gradient(90deg, #9aefff, #5b97ff);
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 700;
+}
+.card.is-focus {
+  border-color: rgba(126, 231, 255, 0.85);
+  box-shadow: 0 0 0 1px rgba(126, 231, 255, 0.45), var(--shadow), 0 0 28px rgba(70, 160, 255, 0.28);
+}
 
 .boot {
   position: fixed;
