@@ -384,6 +384,7 @@ summary { cursor: pointer; color: var(--muted); }
 .card.is-focus {
   border-color: rgba(126, 231, 255, 0.85);
   box-shadow: 0 0 0 1px rgba(126, 231, 255, 0.45), var(--shadow), 0 0 28px rgba(70, 160, 255, 0.28);
+  scroll-margin: 28px;
 }
 
 .boot {
