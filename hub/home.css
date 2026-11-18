@@ -444,7 +444,7 @@ a { color: inherit; }
 }
 .ttl { font-size: 14px; font-weight: 700; line-height: 1.25; }
 .ttl-code {
-  font-family: var(--display);
+  font-family: "Orbitron", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
   font-size: 16px;
   letter-spacing: 0.06em;
 }

@@ -41,6 +41,13 @@
           "code": "PIS",
           "en": "Project InSight",
           "glyph": "insight"
+        },
+        {
+          "kind": "theme",
+          "themeId": "06",
+          "code": "知识通",
+          "en": "知识点学习",
+          "glyph": "bookmark"
         }
       ]
     },

@@ -2,7 +2,7 @@
   "repo": "zhenggsh/IksmHub",
   "branch": "master",
   "htmlPreviewPrefix": "https://htmlpreview.github.io/?",
-  "note": "清单按 master 上的真实目录编写。001、002、003 的 v1.0.0 与 v1.1.0，以及 004、005 的 v1.0.0 已在 master（003 v1.0.0 随 PR #5 合入，003 v1.1.0 随 PR #7 合入，004 v1.0.0 随 PR #9 合入，005 v1.0.0 随 PR #10 合入）。PIS 知识文件为 iksm/02-PIS-Project/PIS_intro.md。同一胶片 ID 的 marp 与 output 按版本号对齐。",
+  "note": "清单按 master 上的真实目录编写。001、002、003 的 v1.0.0 与 v1.1.0，以及 004、005、006 的 v1.0.0 已在 master（003 v1.0.0 随 PR #5 合入，003 v1.1.0 随 PR #7 合入，004 v1.0.0 随 PR #9 合入，005 v1.0.0 随 PR #10 合入，006 v1.0.0 随 PR #15 合入）。PIS 知识文件为 iksm/02-PIS-Project/PIS_intro.md。知识通知识文件为 iksm/06-math-Project/math_intro.md。同一胶片 ID 的 marp 与 output 按版本号对齐。003 的默认入口仍是 v1.1.0。",
   "themes": [
     {
       "id": "01",
@@ -126,6 +126,30 @@
       ],
       "files": [
         "iksm/05-OAP-Project/OAP_intro.md"
+      ]
+    },
+    {
+      "id": "06",
+      "name": "知识通",
+      "path": "iksm/06-math-Project",
+      "documents": [
+        {
+          "title": "知识通系统介绍",
+          "path": "iksm/06-math-Project/math_intro.md",
+          "html": "output/006-math-Project/v1.0.0/slides.html",
+          "deckId": "006",
+          "version": "v1.0.0"
+        }
+      ],
+      "files": [
+        "iksm/06-math-Project/math_intro.md",
+        "iksm/06-math-Project/files/ai_assistant.png",
+        "iksm/06-math-Project/files/ai_assistant2.png",
+        "iksm/06-math-Project/files/ai_study.png",
+        "iksm/06-math-Project/files/book_details.png",
+        "iksm/06-math-Project/files/books.png",
+        "iksm/06-math-Project/files/study_mindmap.png",
+        "iksm/06-math-Project/files/study_treeview.png"
       ]
     }
   ],
@@ -309,6 +333,59 @@
             "output/005-OAP-Project/v1.0.0/assets/architecture.png",
             "output/005-OAP-Project/v1.0.0/assets/dataflow.png",
             "output/005-OAP-Project/v1.0.0/assets/er-model.png"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "006",
+      "name": "知识通",
+      "marpPath": "marp/006-math-Project",
+      "outputPath": "output/006-math-Project",
+      "versions": [
+        {
+          "version": "v1.0.0",
+          "marp": "marp/006-math-Project/v1.0.0/slides.md",
+          "output": "output/006-math-Project/v1.0.0/slides.html",
+          "iksmSource": "iksm/06-math-Project/math_intro.md",
+          "slideCount": 39,
+          "marpAssets": [
+            "marp/006-math-Project/v1.0.0/assets/ai_assistant2.png",
+            "marp/006-math-Project/v1.0.0/assets/ai_study.png",
+            "marp/006-math-Project/v1.0.0/assets/architecture.png",
+            "marp/006-math-Project/v1.0.0/assets/book_details.png",
+            "marp/006-math-Project/v1.0.0/assets/books.png",
+            "marp/006-math-Project/v1.0.0/assets/directory.png",
+            "marp/006-math-Project/v1.0.0/assets/er-model.png",
+            "marp/006-math-Project/v1.0.0/assets/files-index.png",
+            "marp/006-math-Project/v1.0.0/assets/ingest.png",
+            "marp/006-math-Project/v1.0.0/assets/learn-sequence.png",
+            "marp/006-math-Project/v1.0.0/assets/local-flow.png",
+            "marp/006-math-Project/v1.0.0/assets/modules.png",
+            "marp/006-math-Project/v1.0.0/assets/page-routes.png",
+            "marp/006-math-Project/v1.0.0/assets/stack.png",
+            "marp/006-math-Project/v1.0.0/assets/study_mindmap.png",
+            "marp/006-math-Project/v1.0.0/assets/study_treeview.png",
+            "marp/006-math-Project/v1.0.0/assets/two-levels.png"
+          ],
+          "outputAssets": [
+            "output/006-math-Project/v1.0.0/assets/ai_assistant2.png",
+            "output/006-math-Project/v1.0.0/assets/ai_study.png",
+            "output/006-math-Project/v1.0.0/assets/architecture.png",
+            "output/006-math-Project/v1.0.0/assets/book_details.png",
+            "output/006-math-Project/v1.0.0/assets/books.png",
+            "output/006-math-Project/v1.0.0/assets/directory.png",
+            "output/006-math-Project/v1.0.0/assets/er-model.png",
+            "output/006-math-Project/v1.0.0/assets/files-index.png",
+            "output/006-math-Project/v1.0.0/assets/ingest.png",
+            "output/006-math-Project/v1.0.0/assets/learn-sequence.png",
+            "output/006-math-Project/v1.0.0/assets/local-flow.png",
+            "output/006-math-Project/v1.0.0/assets/modules.png",
+            "output/006-math-Project/v1.0.0/assets/page-routes.png",
+            "output/006-math-Project/v1.0.0/assets/stack.png",
+            "output/006-math-Project/v1.0.0/assets/study_mindmap.png",
+            "output/006-math-Project/v1.0.0/assets/study_treeview.png",
+            "output/006-math-Project/v1.0.0/assets/two-levels.png"
           ]
         }
       ]
